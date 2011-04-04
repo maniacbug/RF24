@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: pingpair.pde</title>
+<title>RF24: starping.pde</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -53,10 +53,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>pingpair.pde</h1>  </div>
+<h1>starping.pde</h1>  </div>
 </div>
 <div class="contents">
-<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> class. Write this sketch to two different nodes, connect the role_pin to ground on one. The ping node sends the current time to the pong node, which responds by sending the value back. The ping node can then see how long the whole cycle took.</p>
+<p>This sketch is a more complex example of using the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> library for Arduino. Deploy this on up to six nodes. Set one as the 'pong receiver' by tying the role_pin low, and the others will be 'ping transmit' units. The ping units unit will send out the value of millis() once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took.</p>
+<p>This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role_pin tied to ground. The ping senders are further differentiated by a byte in eeprom.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
 <span class="comment"> </span>
@@ -66,6 +67,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment"> */</span>
 
 <span class="preprocessor">#include &lt;SPI.h&gt;</span>
+<span class="preprocessor">#include &lt;EEPROM.h&gt;</span>
 <span class="preprocessor">#include &quot;nRF24L01.h&quot;</span>
 <span class="preprocessor">#include &quot;RF24.h&quot;</span>
 <span class="preprocessor">#include &quot;printf.h&quot;</span>
@@ -86,8 +88,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment">// Topology</span>
 <span class="comment">//</span>
 
-<span class="comment">// Radio pipe addresses for the 2 nodes to communicate.</span>
-<span class="keyword">const</span> uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
+<span class="comment">// Radio pipe addresses for the nodes to communicate.  Only ping nodes need</span>
+<span class="comment">// dedicated pipes in this topology.  Each ping node has a talking pipe</span>
+<span class="comment">// that it will ping into, and a listening pipe that it will listen for</span>
+<span class="comment">// the pong.  The pong node listens on all the ping node talking pipes</span>
+<span class="comment">// and sends the pong back on the sending node&#39;s specific listening pipe.</span>
+
+<span class="keyword">const</span> uint64_t talking_pipes[5] = { 0xF0F0F0F0D2LL, 0xF0F0F0F0C3LL, 0xF0F0F0F0B4LL, 0xF0F0F0F0A5LL, 0xF0F0F0F096LL };
+<span class="keyword">const</span> uint64_t listening_pipes[5] = { 0x3A3A3A3AD2LL, 0x3A3A3A3AC3LL, 0x3A3A3A3AB4LL, 0x3A3A3A3AA5LL, 0x3A3A3A3A96LL };
 
 <span class="comment">//</span>
 <span class="comment">// Role management</span>
@@ -100,13 +108,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment">//</span>
 
 <span class="comment">// The various roles supported by this sketch</span>
-<span class="keyword">typedef</span> <span class="keyword">enum</span> { role_ping_out = 1, role_pong_back } role_e;
+<span class="keyword">typedef</span> <span class="keyword">enum</span> { role_invalid = 0, role_ping_out, role_pong_back } role_e;
 
 <span class="comment">// The debug-friendly names of those roles</span>
 <span class="keyword">const</span> <span class="keywordtype">char</span>* role_friendly_name[] = { <span class="stringliteral">&quot;invalid&quot;</span>, <span class="stringliteral">&quot;Ping out&quot;</span>, <span class="stringliteral">&quot;Pong back&quot;</span>};
 
 <span class="comment">// The role of the current running sketch</span>
 role_e role;
+
+<span class="comment">//</span>
+<span class="comment">// Address management</span>
+<span class="comment">//</span>
+
+<span class="comment">// Where in EEPROM is the address stored?</span>
+<span class="keyword">const</span> uint8_t address_at_eeprom_location = 0;
+
+<span class="comment">// What is our address (SRAM cache of the address from EEPROM)</span>
+<span class="comment">// Note that zero is an INVALID address.  The pong back unit takes address</span>
+<span class="comment">// 1, and the rest are 2-6</span>
+uint8_t node_address;
 
 <span class="keywordtype">void</span> setup(<span class="keywordtype">void</span>)
 {
@@ -126,13 +146,38 @@ role_e role;
     role = role_pong_back;
 
   <span class="comment">//</span>
+  <span class="comment">// Address</span>
+  <span class="comment">//</span>
+
+  <span class="keywordflow">if</span> ( role == role_pong_back )
+    node_address = 1;
+  <span class="keywordflow">else</span>
+  {
+    <span class="comment">// Read the address from EEPROM</span>
+    uint8_t reading = EEPROM.read(address_at_eeprom_location);
+
+    <span class="comment">// If it is in a valid range for node addresses, it is our</span>
+    <span class="comment">// address.</span>
+    <span class="keywordflow">if</span> ( reading &gt;= 2 &amp;&amp; reading &lt;= 6 )
+      node_address = reading;
+    
+    <span class="comment">// Otherwise, it is invalid, so set our address AND ROLE to &#39;invalid&#39;</span>
+    <span class="keywordflow">else</span>
+    {
+      node_address = 0;
+      role = role_invalid;
+    }
+  }
+
+  <span class="comment">//</span>
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
   
   Serial.begin(9600);
   printf_begin();
-  printf(<span class="stringliteral">&quot;\n\rRF24/examples/pingpair/\n\r&quot;</span>);
+  printf(<span class="stringliteral">&quot;\n\rRF24/examples/starping/\n\r&quot;</span>);
   printf(<span class="stringliteral">&quot;ROLE: %s\n\r&quot;</span>,role_friendly_name[role]);
+  printf(<span class="stringliteral">&quot;ADDRESS: %i\n\r&quot;</span>,node_address);
 
   <span class="comment">//</span>
   <span class="comment">// Setup and configure rf radio</span>
@@ -143,21 +188,26 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Open pipes to other nodes for communication</span>
   <span class="comment">//</span>
+
+  <span class="comment">// The pong node listens on all the ping node talking pipes</span>
+  <span class="comment">// and sends the pong back on the sending node&#39;s specific listening pipe.</span>
+  <span class="keywordflow">if</span> ( role == role_pong_back )
+  {
+    radio.openReadingPipe(1,talking_pipes[0]);
+    radio.openReadingPipe(2,talking_pipes[1]);
+    radio.openReadingPipe(3,talking_pipes[2]);
+    radio.openReadingPipe(4,talking_pipes[3]);
+    radio.openReadingPipe(5,talking_pipes[4]);
+  }
   
-  <span class="comment">// This simple sketch opens two pipes for these two nodes to communicate</span>
-  <span class="comment">// back and forth.</span>
-  <span class="comment">// Open &#39;our&#39; pipe for writing</span>
-  <span class="comment">// Open the &#39;other&#39; pipe for reading, in position #1 (we can have up to 5 pipes open for reading)</span>
-  
+  <span class="comment">// Each ping node has a talking pipe that it will ping into, and a listening </span>
+  <span class="comment">// pipe that it will listen for the pong.  </span>
   <span class="keywordflow">if</span> ( role == role_ping_out )
   {
-    radio.openWritingPipe(pipes[0]);
-    radio.openReadingPipe(1,pipes[1]);
-  }
-  <span class="keywordflow">else</span>
-  {
-    radio.openWritingPipe(pipes[1]);
-    radio.openReadingPipe(1,pipes[0]);
+    <span class="comment">// Write on our talking pipe</span>
+    radio.openWritingPipe(talking_pipes[node_address-2]);
+    <span class="comment">// Listen on our listening pipe </span>
+    radio.openReadingPipe(1,listening_pipes[node_address-2]);
   }
 
   <span class="comment">//</span>
@@ -171,6 +221,15 @@ role_e role;
   <span class="comment">//</span>
   
   radio.printDetails();
+
+  <span class="comment">//</span>
+  <span class="comment">// Prompt the user to assign a node address if we don&#39;t have one</span>
+  <span class="comment">//</span>
+
+  <span class="keywordflow">if</span> ( role == role_invalid )
+  {
+    printf(<span class="stringliteral">&quot;\n\r*** NO NODE ADDRESS ASSIGNED *** Send 1 through 6 to assign an address\n\r&quot;</span>);
+  }
 }
 
 <span class="keywordtype">void</span> loop(<span class="keywordtype">void</span>)
@@ -225,7 +284,8 @@ role_e role;
   <span class="keywordflow">if</span> ( role == role_pong_back )
   {
     <span class="comment">// if there is data ready</span>
-    <span class="keywordflow">if</span> ( radio.available() )
+    uint8_t pipe_num;
+    <span class="keywordflow">if</span> ( radio.available(&amp;pipe_num) )
     {
       <span class="comment">// Dump the payloads until we&#39;ve gotten everything</span>
       <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> got_time;
@@ -236,22 +296,46 @@ role_e role;
         done = radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
   
         <span class="comment">// Spew it</span>
-        printf(<span class="stringliteral">&quot;Got payload %lu...&quot;</span>,got_time);
+        printf(<span class="stringliteral">&quot;Got payload %lu from node %i...&quot;</span>,got_time,pipe_num+1);
       }
       
       <span class="comment">// First, stop listening so we can talk</span>
       radio.stopListening();
+
+      <span class="comment">// Open the correct pipe for writing</span>
+      radio.openWritingPipe(listening_pipes[pipe_num]);
+
+      <span class="comment">// Retain the low 2 bytes to identify the pipe for the spew</span>
+      uint16_t pipe_id = listening_pipes[pipe_num] &amp; 0xffff;
             
       <span class="comment">// Send the final one back.</span>
       radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
-      printf(<span class="stringliteral">&quot;Sent response.\n\r&quot;</span>);
+      printf(<span class="stringliteral">&quot;Sent response to %04x.\n\r&quot;</span>,pipe_id);
       
       <span class="comment">// Now, resume listening so we catch the next packets.</span>
       radio.startListening();
     }
   }
+
+  <span class="comment">//</span>
+  <span class="comment">// Listen for serial input, which is how we set the address</span>
+  <span class="comment">//</span>
+  <span class="keywordflow">if</span> (Serial.available())
+  {
+    <span class="comment">// If the character on serial input is in a valid range...</span>
+    <span class="keywordtype">char</span> c = Serial.read();
+    <span class="keywordflow">if</span> ( c &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; c &lt;= <span class="charliteral">&#39;6&#39;</span> )
+    {
+      <span class="comment">// It is our address</span>
+      EEPROM.write(address_at_eeprom_location,c-<span class="charliteral">&#39;0&#39;</span>);
+
+      <span class="comment">// And we are done right now (no easy way to soft reset)</span>
+      printf(<span class="stringliteral">&quot;\n\rManually reset address to: %c\n\rPress RESET to continue!&quot;</span>,c);
+      <span class="keywordflow">while</span>(1);
+    }
+  }
 }
-<span class="comment">// vim:ci sts=2 sw=2 ft=cpp</span>
+<span class="comment">// vim:ai:ci sts=2 sw=2 ft=cpp</span>
 </pre></div> </div>
 </div>
 <!--- window showing the filter options -->

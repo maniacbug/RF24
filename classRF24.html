@@ -134,22 +134,8 @@ Protected Member Functions</h2></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Driver for nRF24L01 2.4GHz Wireless Transceiver. </p>
-<p>Please refer to:</p>
-<ul>
-<li><a href="http://maniacbug.github.com/RF24/classRF24.html">Detailed Documentation</a> </li>
-<li><a href="https://github.com/maniacbug/RF24/">Source Code</a> </li>
-<li><a href="http://www.nordicsemi.com/files/Product/data_sheet/nRF24L01_Product_Specification_v2_0.pdf">Chip Datasheet</a></li>
-</ul>
-<p>This chip uses the SPI bus, plus two chip control pins. Remember that pin 10 must still remain an output, or the SPI hardware will go into 'slave' mode.</p>
-<p>Design Goals: This library is designed to be... </p>
-<ul>
-<li>Maximally compliant with the intended operation of the chip </li>
-<li>Easy for beginners to use </li>
-<li>Consumed with a public interface that's similiar to other Arduino standard libraries </li>
-<li>Built against the standard SPI library. </li>
-</ul>
 <dl><dt><b>Examples: </b></dt><dd>
-<p><a class="el" href="pingpair_8pde-example.html#_a0">pingpair.pde</a>.</p>
+<p><a class="el" href="pingpair_8pde-example.html#_a0">pingpair.pde</a>, and <a class="el" href="starping_8pde-example.html#_a0">starping.pde</a>.</p>
 </dd>
 </dl></div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ab75e0bd7b4f9e86f335f2f770cb73f95"></a><!-- doxytag: member="RF24::RF24" ref="ab75e0bd7b4f9e86f335f2f770cb73f95" args="(int _cepin, int _cspin)" -->
@@ -416,8 +402,8 @@ Protected Member Functions</h2></td></tr>
 <p>Up to 5 pipes can be open for reading at once. Open all the reading pipes, and then call <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe</a></dd></dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>all 5 reading pipes should share the first 32 bits. Only the least significant byte should be unique, e.g.</dd></dl>
-<div class="fragment"><pre class="fragment">   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(0xF0F0F0F0AA);
-   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(0xF0F0F0F066);
+<div class="fragment"><pre class="fragment">   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(1,0xF0F0F0F0AA);
+   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(2,0xF0F0F0F066);
 </pre></div><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Enforce the restriction that all pipes must share the top 32 bits</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -692,7 +678,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Set Payload Size. </p>
-<p>This implementation uses a pre-stablished fixed payload size for all transmissions.</p>
+<p>This implementation uses a pre-stablished fixed payload size for all transmissions. If this method is never called, the driver will always transmit the maximum payload size (32 bytes), no matter how much was sent to <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.</p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Implement variable-sized payloads feature</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -919,7 +905,7 @@ Protected Member Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Apr 1 2011 23:00:28 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun Apr 3 2011 20:29:24 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

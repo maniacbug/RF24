@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: Driver Library for nRF24L01</title>
+<title>RF24: Driver for nRF24L01 2.4GHz Wireless Transceiver</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -53,10 +53,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>Driver Library for nRF24L01 </h1>  </div>
+<h1>Driver for nRF24L01 2.4GHz Wireless Transceiver </h1>  </div>
 </div>
 <div class="contents">
-<div class="textblock"><p>See the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> class for details on how to drive this chip. </p>
+<div class="textblock"><p>Design Goals: This library is designed to be... </p>
+<ul>
+<li>Maximally compliant with the intended operation of the chip </li>
+<li>Easy for beginners to use </li>
+<li>Consumed with a public interface that's similiar to other Arduino standard libraries </li>
+<li>Built against the standard SPI library.</li>
+</ul>
+<p>Please refer to:</p>
+<ul>
+<li><a href="http://maniacbug.github.com/RF24/">Documentation Main Page</a> </li>
+<li><a href="http://maniacbug.github.com/RF24/classRF24.html">RF24 Class Documentation</a> </li>
+<li><a href="https://github.com/maniacbug/RF24/">Source Code</a> </li>
+<li><a href="https://github.com/maniacbug/RF24/archives/master">Downloads Page</a> </li>
+<li><a href="http://www.nordicsemi.com/files/Product/data_sheet/nRF24L01_Product_Specification_v2_0.pdf">Chip Datasheet</a></li>
+</ul>
+<p>This chip uses the SPI bus, plus two chip control pins. Remember that pin 10 must still remain an output, or the SPI hardware will go into 'slave' mode. </p>
 </div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -72,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Apr 1 2011 23:00:28 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun Apr 3 2011 20:29:24 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
