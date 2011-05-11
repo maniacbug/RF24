@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: starping.pde</title>
+<title>RF24: pingpair_sleepy.pde</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javaScript" src="search/search.js"></script>
@@ -42,11 +42,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>starping.pde</h1>  </div>
+<h1>pingpair_sleepy.pde</h1>  </div>
 </div>
 <div class="contents">
-<p>This sketch is a more complex example of using the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> library for Arduino. Deploy this on up to six nodes. Set one as the 'pong receiver' by tying the role_pin low, and the others will be 'ping transmit' units. The ping units unit will send out the value of millis() once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took. Warning: Calling this function clears the internal flag which indicates a payload is available. If it returns true, you must read the packet out as the very next interaction with the radio, or the results are undefined.</p>
-<p>This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role_pin tied to ground. The ping senders are further differentiated by a byte in eeprom.</p>
+<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> class to create a battery- efficient system. It is just like the pingpair.pde example, but the ping node powers down the radio and sleeps the MCU after every ping/pong cycle.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
 <span class="comment"> </span>
@@ -56,7 +55,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment"> */</span>
 
 <span class="preprocessor">#include &lt;SPI.h&gt;</span>
-<span class="preprocessor">#include &lt;EEPROM.h&gt;</span>
+<span class="preprocessor">#include &lt;avr/sleep.h&gt;</span>
+<span class="preprocessor">#include &lt;avr/power.h&gt;</span>
 <span class="preprocessor">#include &quot;nRF24L01.h&quot;</span>
 <span class="preprocessor">#include &quot;RF24.h&quot;</span>
 <span class="preprocessor">#include &quot;printf.h&quot;</span>
@@ -70,21 +70,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
 
 <span class="comment">// sets the role of this unit in hardware.  Connect to GND to be the &#39;pong&#39; receiver</span>
-<span class="comment">// Leave open to be the &#39;pong&#39; receiver.</span>
+<span class="comment">// Leave open to be the &#39;ping&#39; transmitter </span>
 <span class="keyword">const</span> <span class="keywordtype">int</span> role_pin = 7;
 
 <span class="comment">//</span>
 <span class="comment">// Topology</span>
 <span class="comment">//</span>
 
-<span class="comment">// Radio pipe addresses for the nodes to communicate.  Only ping nodes need</span>
-<span class="comment">// dedicated pipes in this topology.  Each ping node has a talking pipe</span>
-<span class="comment">// that it will ping into, and a listening pipe that it will listen for</span>
-<span class="comment">// the pong.  The pong node listens on all the ping node talking pipes</span>
-<span class="comment">// and sends the pong back on the sending node&#39;s specific listening pipe.</span>
-
-<span class="keyword">const</span> uint64_t talking_pipes[5] = { 0xF0F0F0F0D2LL, 0xF0F0F0F0C3LL, 0xF0F0F0F0B4LL, 0xF0F0F0F0A5LL, 0xF0F0F0F096LL };
-<span class="keyword">const</span> uint64_t listening_pipes[5] = { 0x3A3A3A3AD2LL, 0x3A3A3A3AC3LL, 0x3A3A3A3AB4LL, 0x3A3A3A3AA5LL, 0x3A3A3A3A96LL };
+<span class="comment">// Radio pipe addresses for the 2 nodes to communicate.</span>
+<span class="keyword">const</span> uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
 
 <span class="comment">//</span>
 <span class="comment">// Role management</span>
@@ -97,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment">//</span>
 
 <span class="comment">// The various roles supported by this sketch</span>
-<span class="keyword">typedef</span> <span class="keyword">enum</span> { role_invalid = 0, role_ping_out, role_pong_back } role_e;
+<span class="keyword">typedef</span> <span class="keyword">enum</span> { role_ping_out = 1, role_pong_back } role_e;
 
 <span class="comment">// The debug-friendly names of those roles</span>
 <span class="keyword">const</span> <span class="keywordtype">char</span>* role_friendly_name[] = { <span class="stringliteral">&quot;invalid&quot;</span>, <span class="stringliteral">&quot;Ping out&quot;</span>, <span class="stringliteral">&quot;Pong back&quot;</span>};
@@ -106,16 +100,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 role_e role;
 
 <span class="comment">//</span>
-<span class="comment">// Address management</span>
+<span class="comment">// Sleep declarations</span>
 <span class="comment">//</span>
 
-<span class="comment">// Where in EEPROM is the address stored?</span>
-<span class="keyword">const</span> uint8_t address_at_eeprom_location = 0;
+<span class="keyword">typedef</span> <span class="keyword">enum</span> { wdt_16ms = 0, wdt_32ms, wdt_64ms, wdt_128ms, wdt_250ms, wdt_500ms, wdt_1s, wdt_2s, wdt_4s, wdt_8s } wdt_prescalar_e;
 
-<span class="comment">// What is our address (SRAM cache of the address from EEPROM)</span>
-<span class="comment">// Note that zero is an INVALID address.  The pong back unit takes address</span>
-<span class="comment">// 1, and the rest are 2-6</span>
-uint8_t node_address;
+<span class="keywordtype">void</span> setup_watchdog(uint8_t prescalar);
+<span class="keywordtype">void</span> do_sleep(<span class="keywordtype">void</span>);
+
+<span class="keyword">const</span> <span class="keywordtype">short</span> sleep_cycles_per_transmission = 4;
+<span class="keyword">volatile</span> <span class="keywordtype">short</span> sleep_cycles_remaining = sleep_cycles_per_transmission;
+
+<span class="comment">//</span>
+<span class="comment">// Normal operation</span>
+<span class="comment">//</span>
 
 <span class="keywordtype">void</span> setup(<span class="keywordtype">void</span>)
 {
@@ -135,38 +133,21 @@ uint8_t node_address;
     role = role_pong_back;
 
   <span class="comment">//</span>
-  <span class="comment">// Address</span>
-  <span class="comment">//</span>
-
-  <span class="keywordflow">if</span> ( role == role_pong_back )
-    node_address = 1;
-  <span class="keywordflow">else</span>
-  {
-    <span class="comment">// Read the address from EEPROM</span>
-    uint8_t reading = EEPROM.read(address_at_eeprom_location);
-
-    <span class="comment">// If it is in a valid range for node addresses, it is our</span>
-    <span class="comment">// address.</span>
-    <span class="keywordflow">if</span> ( reading &gt;= 2 &amp;&amp; reading &lt;= 6 )
-      node_address = reading;
-    
-    <span class="comment">// Otherwise, it is invalid, so set our address AND ROLE to &#39;invalid&#39;</span>
-    <span class="keywordflow">else</span>
-    {
-      node_address = 0;
-      role = role_invalid;
-    }
-  }
-
-  <span class="comment">//</span>
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
   
   Serial.begin(9600);
   printf_begin();
-  printf(<span class="stringliteral">&quot;\n\rRF24/examples/starping/\n\r&quot;</span>);
+  printf(<span class="stringliteral">&quot;\n\rRF24/examples/pingpair_sleepy/\n\r&quot;</span>);
   printf(<span class="stringliteral">&quot;ROLE: %s\n\r&quot;</span>,role_friendly_name[role]);
-  printf(<span class="stringliteral">&quot;ADDRESS: %i\n\r&quot;</span>,node_address);
+
+  <span class="comment">//</span>
+  <span class="comment">// Prepare sleep parameters</span>
+  <span class="comment">//</span>
+
+  <span class="comment">// Only the ping out role sleeps.  Wake up every 4s to send a ping</span>
+  <span class="keywordflow">if</span> ( role == role_ping_out )
+    setup_watchdog(wdt_1s);
 
   <span class="comment">//</span>
   <span class="comment">// Setup and configure rf radio</span>
@@ -177,26 +158,21 @@ uint8_t node_address;
   <span class="comment">//</span>
   <span class="comment">// Open pipes to other nodes for communication</span>
   <span class="comment">//</span>
-
-  <span class="comment">// The pong node listens on all the ping node talking pipes</span>
-  <span class="comment">// and sends the pong back on the sending node&#39;s specific listening pipe.</span>
-  <span class="keywordflow">if</span> ( role == role_pong_back )
-  {
-    radio.openReadingPipe(1,talking_pipes[0]);
-    radio.openReadingPipe(2,talking_pipes[1]);
-    radio.openReadingPipe(3,talking_pipes[2]);
-    radio.openReadingPipe(4,talking_pipes[3]);
-    radio.openReadingPipe(5,talking_pipes[4]);
-  }
   
-  <span class="comment">// Each ping node has a talking pipe that it will ping into, and a listening </span>
-  <span class="comment">// pipe that it will listen for the pong.  </span>
+  <span class="comment">// This simple sketch opens two pipes for these two nodes to communicate</span>
+  <span class="comment">// back and forth.</span>
+  <span class="comment">// Open &#39;our&#39; pipe for writing</span>
+  <span class="comment">// Open the &#39;other&#39; pipe for reading, in position #1 (we can have up to 5 pipes open for reading)</span>
+  
   <span class="keywordflow">if</span> ( role == role_ping_out )
   {
-    <span class="comment">// Write on our talking pipe</span>
-    radio.openWritingPipe(talking_pipes[node_address-2]);
-    <span class="comment">// Listen on our listening pipe </span>
-    radio.openReadingPipe(1,listening_pipes[node_address-2]);
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  }
+  <span class="keywordflow">else</span>
+  {
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
   }
 
   <span class="comment">//</span>
@@ -210,15 +186,6 @@ uint8_t node_address;
   <span class="comment">//</span>
   
   radio.printDetails();
-
-  <span class="comment">//</span>
-  <span class="comment">// Prompt the user to assign a node address if we don&#39;t have one</span>
-  <span class="comment">//</span>
-
-  <span class="keywordflow">if</span> ( role == role_invalid )
-  {
-    printf(<span class="stringliteral">&quot;\n\r*** NO NODE ADDRESS ASSIGNED *** Send 1 through 6 to assign an address\n\r&quot;</span>);
-  }
 }
 
 <span class="keywordtype">void</span> loop(<span class="keywordtype">void</span>)
@@ -261,20 +228,36 @@ uint8_t node_address;
       <span class="comment">// Spew it</span>
       printf(<span class="stringliteral">&quot;Got response %lu, round-trip delay: %lu\n\r&quot;</span>,got_time,millis()-got_time);
     }
+  
+    <span class="comment">//</span>
+    <span class="comment">// Shut down the system</span>
+    <span class="comment">//</span>
+
+    <span class="comment">// Experiment with some delay here to see if it has an effect</span>
+    delay(500);
+
+    <span class="comment">// Power down the radio.  Note that the radio will get powered back up</span>
+    <span class="comment">// on the next write() call.</span>
+    radio.powerDown();
+
+    <span class="comment">// Sleep the MCU.  The watchdog timer will awaken in a short while, and</span>
+    <span class="comment">// continue execution here.</span>
+    <span class="keywordflow">while</span>( sleep_cycles_remaining )
+      do_sleep();
     
-    <span class="comment">// Try again 1s later</span>
-    delay(1000);
+    sleep_cycles_remaining = sleep_cycles_per_transmission;
   }
   
   <span class="comment">//</span>
   <span class="comment">// Pong back role.  Receive each packet, dump it out, and send it back</span>
   <span class="comment">//</span>
+  <span class="comment">// This is untouched from the pingpair example.</span>
+  <span class="comment">//</span>
   
   <span class="keywordflow">if</span> ( role == role_pong_back )
   {
     <span class="comment">// if there is data ready</span>
-    uint8_t pipe_num;
-    <span class="keywordflow">if</span> ( radio.available(&amp;pipe_num) )
+    <span class="keywordflow">if</span> ( radio.available() )
     {
       <span class="comment">// Dump the payloads until we&#39;ve gotten everything</span>
       <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> got_time;
@@ -284,47 +267,58 @@ uint8_t node_address;
         <span class="comment">// Fetch the payload, and see if this was the last one.</span>
         done = radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
   
-        <span class="comment">// Spew it</span>
-        printf(<span class="stringliteral">&quot;Got payload %lu from node %i...&quot;</span>,got_time,pipe_num+1);
+        <span class="comment">// Spew it.  Include our time, because the ping_out millis counter is unreliable</span>
+        <span class="comment">// due to it sleeping</span>
+        printf(<span class="stringliteral">&quot;Got payload %lu @ %lu...&quot;</span>,got_time,millis());
       }
       
       <span class="comment">// First, stop listening so we can talk</span>
       radio.stopListening();
-
-      <span class="comment">// Open the correct pipe for writing</span>
-      radio.openWritingPipe(listening_pipes[pipe_num-1]);
-
-      <span class="comment">// Retain the low 2 bytes to identify the pipe for the spew</span>
-      uint16_t pipe_id = listening_pipes[pipe_num-1] &amp; 0xffff;
             
       <span class="comment">// Send the final one back.</span>
       radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
-      printf(<span class="stringliteral">&quot;Sent response to %04x.\n\r&quot;</span>,pipe_id);
+      printf(<span class="stringliteral">&quot;Sent response.\n\r&quot;</span>);
       
       <span class="comment">// Now, resume listening so we catch the next packets.</span>
       radio.startListening();
     }
   }
-
-  <span class="comment">//</span>
-  <span class="comment">// Listen for serial input, which is how we set the address</span>
-  <span class="comment">//</span>
-  <span class="keywordflow">if</span> (Serial.available())
-  {
-    <span class="comment">// If the character on serial input is in a valid range...</span>
-    <span class="keywordtype">char</span> c = Serial.read();
-    <span class="keywordflow">if</span> ( c &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; c &lt;= <span class="charliteral">&#39;6&#39;</span> )
-    {
-      <span class="comment">// It is our address</span>
-      EEPROM.write(address_at_eeprom_location,c-<span class="charliteral">&#39;0&#39;</span>);
-
-      <span class="comment">// And we are done right now (no easy way to soft reset)</span>
-      printf(<span class="stringliteral">&quot;\n\rManually reset address to: %c\n\rPress RESET to continue!&quot;</span>,c);
-      <span class="keywordflow">while</span>(1);
-    }
-  }
 }
-<span class="comment">// vim:ai:ci sts=2 sw=2 ft=cpp</span>
+
+<span class="comment">//</span>
+<span class="comment">// Sleep helpers </span>
+<span class="comment">//</span>
+
+<span class="comment">// 0=16ms, 1=32ms,2=64ms,3=125ms,4=250ms,5=500ms</span>
+<span class="comment">// 6=1 sec,7=2 sec, 8=4 sec, 9= 8sec</span>
+
+<span class="keywordtype">void</span> setup_watchdog(uint8_t prescalar) 
+{
+    prescalar = min(9,prescalar);
+    uint8_t wdtcsr = prescalar &amp; 7;
+    <span class="keywordflow">if</span> ( prescalar &amp; 8 )
+        wdtcsr |= _BV(WDP3);
+
+    MCUSR &amp;= ~_BV(WDRF);
+    WDTCSR = _BV(WDCE) | _BV(WDE);
+    WDTCSR = _BV(WDCE) | wdtcsr | _BV(WDIE);
+}
+
+ISR(WDT_vect) {
+  --sleep_cycles_remaining;
+}
+
+<span class="keywordtype">void</span> do_sleep(<span class="keywordtype">void</span>)
+{
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN); <span class="comment">// sleep mode is set here</span>
+    sleep_enable();
+
+    sleep_mode();                        <span class="comment">// System sleeps here</span>
+
+    sleep_disable();                     <span class="comment">// System continues execution here when watchdog timed out </span>
+}
+
+<span class="comment">// vim:ai:cin:sts=2 sw=2 ft=cpp</span>
 </pre></div> </div>
 </div>
 <!--- window showing the filter options -->
