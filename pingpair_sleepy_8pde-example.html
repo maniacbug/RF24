@@ -56,7 +56,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>pingpair_sleepy.pde</h1>  </div>
 </div>
 <div class="contents">
-<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> class to create a battery- efficient system. It is just like the pingpair.pde example, but the ping node powers down the radio and sleeps the MCU after every ping/pong cycle.</p>
+<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> class to create a battery- efficient system. It is just like the pingpair.pde example, but the ping node powers down the radio and sleeps the MCU after every ping/pong cycle.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
 <span class="comment"> </span>
@@ -78,7 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <span class="comment">// Set up nRF24L01 radio on SPI bus plus pins 8 &amp; 9</span>
 
-<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
+<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
 
 <span class="comment">// sets the role of this unit in hardware.  Connect to GND to be the &#39;pong&#39; receiver</span>
 <span class="comment">// Leave open to be the &#39;ping&#39; transmitter </span>
@@ -346,7 +346,7 @@ ISR(WDT_vect) {
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 25 2011 20:52:12 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed May 25 2011 20:58:33 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

@@ -56,7 +56,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>starping.pde</h1>  </div>
 </div>
 <div class="contents">
-<p>This sketch is a more complex example of using the <a class="el" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> library for Arduino. Deploy this on up to six nodes. Set one as the 'pong receiver' by tying the role_pin low, and the others will be 'ping transmit' units. The ping units unit will send out the value of millis() once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took.</p>
+<p>This sketch is a more complex example of using the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> library for Arduino. Deploy this on up to six nodes. Set one as the 'pong receiver' by tying the role_pin low, and the others will be 'ping transmit' units. The ping units unit will send out the value of millis() once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took.</p>
 <p>This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role_pin tied to ground. The ping senders are further differentiated by a byte in eeprom.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
@@ -78,7 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <span class="comment">// Set up nRF24L01 radio on SPI bus plus pins 8 &amp; 9</span>
 
-<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
+<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
 
 <span class="comment">// sets the role of this unit in hardware.  Connect to GND to be the &#39;pong&#39; receiver</span>
 <span class="comment">// Leave open to be the &#39;pong&#39; receiver.</span>
@@ -352,7 +352,7 @@ uint8_t node_address;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 25 2011 20:52:12 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed May 25 2011 20:58:33 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
