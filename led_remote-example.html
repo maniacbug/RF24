@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: Todo List</title>
+<title>RF24: led_remote</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -28,7 +28,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
@@ -53,20 +53,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>Todo List </h1>  </div>
+<h1>led_remote</h1>  </div>
 </div>
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="_todo000001"></a> </p>
-<dl>
-<dt>Member <a class="el" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45">RF24::openReadingPipe</a> (uint8_t number, uint64_t address) </dt>
-<dd>Enforce the restriction that pipes 1-5 must share the top 32 bits</dd>
-</dl>
-<p><a class="anchor" id="_todo000002"></a> </p>
-<dl>
-<dt>Member <a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f">RF24::setPayloadSize</a> (uint8_t size) </dt>
-<dd>Implement variable-sized payloads feature</dd>
-</dl>
-</div></div>
+<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> class to control a remote bank of LED's using buttons on a remote control. Every time the buttons change on the remote, the entire state of buttons is send to the led board, which displays the state.</p>
+<div class="fragment"><pre class="fragment"></pre></div> </div>
+</div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
