@@ -156,13 +156,17 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode and print the given status to stdout.  <a href="#a701efcbbe01ad137773e52aac1c44c17"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aa69594e3d8db3128edbf7e5bf4de03f8">print_observe_tx</a> (uint8_t value)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode and print the given 'observe_tx' value to stdout.  <a href="#aa69594e3d8db3128edbf7e5bf4de03f8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a2780fd8080380154d3a13454ae5bb92b">print_byte_register</a> (prog_char *name, uint8_t reg, uint8_t qty=1)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the name and value of an 8-bit register to stdout.  <a href="#a2780fd8080380154d3a13454ae5bb92b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a3f30ab9286a5c703ac9e610b9c4483e4">print_address_register</a> (prog_char *name, uint8_t reg, uint8_t qty=1)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the name and value of a 40-bit address register to stdout.  <a href="#a3f30ab9286a5c703ac9e610b9c4483e4"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a4a22253276f00b24dc8ab9309c03e8da">toggle_features</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn on or off the special features of the chip.  <a href="#a4a22253276f00b24dc8ab9309c03e8da"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Driver for nRF24L01(+) 2.4GHz Wireless Transceiver. </p>
 <dl><dt><b>Examples: </b></dt><dd>
-<p><a class="el" href="led_remote_8pde-example.html#_a0">led_remote.pde</a>, <a class="el" href="pingpair_8pde-example.html#_a0">pingpair.pde</a>, <a class="el" href="pingpair_pl_8pde-example.html#_a0">pingpair_pl.pde</a>, <a class="el" href="pingpair_sleepy_8pde-example.html#_a0">pingpair_sleepy.pde</a>, <a class="el" href="scanner_8pde-example.html#_a0">scanner.pde</a>, <a class="el" href="starping_8pde-example.html#_a0">starping.pde</a>, and <a class="el" href="starping_relay_8pde-example.html#_a0">starping_relay.pde</a>.</p>
+<p><a class="el" href="led_remote_8pde-example.html#_a0">led_remote.pde</a>, <a class="el" href="pingpair_8pde-example.html#_a0">pingpair.pde</a>, <a class="el" href="pingpair_pl_8pde-example.html#_a0">pingpair_pl.pde</a>, <a class="el" href="pingpair_sleepy_8pde-example.html#_a0">pingpair_sleepy.pde</a>, <a class="el" href="scanner_8pde-example.html#_a0">scanner.pde</a>, and <a class="el" href="starping_8pde-example.html#_a0">starping.pde</a>.</p>
 </dd>
 </dl></div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a8cd165a822c8f77e10782c6729c5b088"></a><!-- doxytag: member="RF24::RF24" ref="a8cd165a822c8f77e10782c6729c5b088" args="(uint8_t _cepin, uint8_t _cspin)" -->
@@ -531,6 +535,94 @@ Protected Member Functions</h2></td></tr>
 
 <p>Enter low-power mode. </p>
 <p>To return to normal power mode, either <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a> some data or <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3f30ab9286a5c703ac9e610b9c4483e4"></a><!-- doxytag: member="RF24::print_address_register" ref="a3f30ab9286a5c703ac9e610b9c4483e4" args="(prog_char *name, uint8_t reg, uint8_t qty=1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::print_address_register </td>
+          <td>(</td>
+          <td class="paramtype">prog_char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>reg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>qty</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Print the name and value of a 40-bit address register to stdout. </p>
+<p>Optionally it can print some quantity of successive registers on the same line. This is useful for printing a group of related registers on one line.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the register </td></tr>
+    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
+    <tr><td class="paramname">qty</td><td>How many successive registers to print </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a2780fd8080380154d3a13454ae5bb92b"></a><!-- doxytag: member="RF24::print_byte_register" ref="a2780fd8080380154d3a13454ae5bb92b" args="(prog_char *name, uint8_t reg, uint8_t qty=1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::print_byte_register </td>
+          <td>(</td>
+          <td class="paramtype">prog_char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>reg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>qty</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Print the name and value of an 8-bit register to stdout. </p>
+<p>Optionally it can print some quantity of successive registers on the same line. This is useful for printing a group of related registers on one line.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the register </td></tr>
+    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
+    <tr><td class="paramname">qty</td><td>How many successive registers to print </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1206,7 +1298,7 @@ Protected Member Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 4 2011 16:02:26 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 06:31:27 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

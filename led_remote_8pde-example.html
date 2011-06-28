@@ -121,6 +121,7 @@ role_e role;
 <span class="comment">//</span>
 
 uint8_t button_states[num_button_pins];
+uint8_t led_states[num_led_pins];
 
 <span class="comment">//</span>
 <span class="comment">// Setup </span>
@@ -147,7 +148,7 @@ uint8_t button_states[num_button_pins];
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
   
-  Serial.begin(9600);
+  Serial.begin(57600);
   printf_begin();
   printf(<span class="stringliteral">&quot;\n\rRF24/examples/led_remote/\n\r&quot;</span>);
   printf(<span class="stringliteral">&quot;ROLE: %s\n\r&quot;</span>,role_friendly_name[role]);
@@ -205,11 +206,12 @@ uint8_t button_states[num_button_pins];
   <span class="comment">// Turn LED&#39;s ON until we start getting keys</span>
   <span class="keywordflow">if</span> ( role == role_led )
   {
-    <span class="keywordtype">int</span> i = num_button_pins;
+    <span class="keywordtype">int</span> i = num_led_pins;
     <span class="keywordflow">while</span>(i--)
     {
       pinMode(button_pins[i],OUTPUT);
-      digitalWrite(button_pins[i],HIGH);
+      led_states[i] = HIGH;
+      digitalWrite(led_pins[i],led_states[i]);
     }
   }
 
@@ -276,10 +278,16 @@ uint8_t button_states[num_button_pins];
         <span class="comment">// Spew it</span>
         printf(<span class="stringliteral">&quot;Got buttons\n\r&quot;</span>);
 
-        <span class="comment">// Set all the LED&#39;s according to the buttons</span>
+        <span class="comment">// For each button, if the button now on, then toggle the LED</span>
         <span class="keywordtype">int</span> i = num_led_pins;
         <span class="keywordflow">while</span>(i--)
-          digitalWrite(led_pins[i],button_states[i]);
+        {
+          <span class="keywordflow">if</span> ( button_states[i] )
+          {
+            led_states[i] ^= HIGH;
+            digitalWrite(led_pins[i],led_states[i]);
+          }
+        }
       }
     }
   }
@@ -301,7 +309,7 @@ uint8_t button_states[num_button_pins];
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 4 2011 16:02:26 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 06:31:26 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
