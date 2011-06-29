@@ -96,6 +96,8 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Optional public interface</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Methods you may want to use but are not needed for regular operation </p>
 </div></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a4c6d3959c8320e64568395f4ef507aef">setRetries</a> (uint8_t delay, uint8_t count)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the number and delay of retries upon failed submit.  <a href="#a4c6d3959c8320e64568395f4ef507aef"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a5e6e5a5f6c85d2638381cab2c0f3702e">setChannel</a> (uint8_t channel)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set RF communication channel.  <a href="#a5e6e5a5f6c85d2638381cab2c0f3702e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f">setPayloadSize</a> (uint8_t size)</td></tr>
@@ -474,12 +476,14 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Open a pipe for reading. </p>
-<p>Up to 5 pipes can be open for reading at once. Open all the reading pipes, and then call <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>.</p>
+<p>Up to 6 pipes can be open for reading at once. Open all the reading pipes, and then call <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe</a></dd></dl>
-<dl class="warning"><dt><b>Warning:</b></dt><dd>Pipes 1-5 should share the first 32 bits. Only the least significant byte should be unique, e.g.</dd></dl>
-<div class="fragment"><pre class="fragment">   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(1,0xF0F0F0F0AA);
+<dl class="warning"><dt><b>Warning:</b></dt><dd>Pipes 1-5 should share the first 32 bits. Only the least significant byte should be unique, e.g. <div class="fragment"><pre class="fragment">   <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(1,0xF0F0F0F0AA);
    <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(2,0xF0F0F0F066);
-</pre></div><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Enforce the restriction that pipes 1-5 must share the top 32 bits</dd></dl>
+</pre></div></dd>
+<dd>
+Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and then <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>, it will overwrite the writing pipe. Ergo, do an <a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe()</a> again before <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Enforce the restriction that pipes 1-5 must share the top 32 bits</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">number</td><td>Which pipe# to open, 0-5. </td></tr>
@@ -985,10 +989,46 @@ Protected Member Functions</h2></td></tr>
 
 <p>Set Payload Size. </p>
 <p>This implementation uses a pre-stablished fixed payload size for all transmissions. If this method is never called, the driver will always transmit the maximum payload size (32 bytes), no matter how much was sent to <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Implement variable-sized payloads feature</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Implement variable-sized payloads feature</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">size</td><td>The number of bytes in the payload </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4c6d3959c8320e64568395f4ef507aef"></a><!-- doxytag: member="RF24::setRetries" ref="a4c6d3959c8320e64568395f4ef507aef" args="(uint8_t delay, uint8_t count)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::setRetries </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>delay</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set the number and delay of retries upon failed submit. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delay</td><td>How long to wait between each retry, in multiples of 250us, max is 15. 0 means 250us, 15 means 4000us. </td></tr>
+    <tr><td class="paramname">count</td><td>How many retries before giving up, max 15 </td></tr>
   </table>
   </dd>
 </dl>
@@ -1105,6 +1145,7 @@ Protected Member Functions</h2></td></tr>
 <p>Be sure to call <a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe()</a> first to set the destination of where to write to.</p>
 <p>This blocks until the message is successfully acknowledged by the receiver or the timeout/retransmit maxima are reached. In the current configuration, the max delay here is 60ms.</p>
 <p>The maximum size of data written is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Payload Size.">getPayloadSize()</a>. However, you can write less, and the remainder will just be filled with zeroes.</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Write a non-blocking write to support users who want to check on progress separately or use an interrupt.</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>Pointer to the data to be sent </td></tr>
@@ -1154,6 +1195,43 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a326cd59fa7b61ddbb40e751341fb662d"></a><!-- doxytag: member="RF24::write_register" ref="a326cd59fa7b61ddbb40e751341fb662d" args="(uint8_t reg, uint8_t value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t RF24::write_register </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>reg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Write a single byte to a register. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
+    <tr><td class="paramname">value</td><td>The new value to write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Current value of status register </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af6aa2abd130178de532e9873e906296c"></a><!-- doxytag: member="RF24::write_register" ref="af6aa2abd130178de532e9873e906296c" args="(uint8_t reg, const uint8_t *buf, uint8_t len)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1191,43 +1269,6 @@ Protected Member Functions</h2></td></tr>
     <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
     <tr><td class="paramname">buf</td><td>Where to get the data </td></tr>
     <tr><td class="paramname">len</td><td>How many bytes of data to transfer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Current value of status register </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a326cd59fa7b61ddbb40e751341fb662d"></a><!-- doxytag: member="RF24::write_register" ref="a326cd59fa7b61ddbb40e751341fb662d" args="(uint8_t reg, uint8_t value)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t RF24::write_register </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>reg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Write a single byte to a register. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
-    <tr><td class="paramname">value</td><td>The new value to write </td></tr>
   </table>
   </dd>
 </dl>
@@ -1298,7 +1339,7 @@ Protected Member Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 06:31:27 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 21:22:11 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

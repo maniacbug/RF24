@@ -140,6 +140,12 @@ role_e role;
   
   radio.begin();
 
+  <span class="comment">// optionally, increase the delay between retries &amp; # of retries</span>
+  radio.setRetries(15,15); 
+
+  <span class="comment">// optionally, use a high channel to avoid WiFi chatter</span>
+  radio.setChannel(110);
+
   <span class="comment">//</span>
   <span class="comment">// Open pipes to other nodes for communication</span>
   <span class="comment">//</span>
@@ -251,7 +257,7 @@ role_e role;
     }
   }
 }
-<span class="comment">// vim:ci sts=2 sw=2 ft=cpp</span>
+<span class="comment">// vim:cin:ai:sts=2 sw=2 ft=cpp</span>
 </pre></div> </div>
 </div>
 <!--- window showing the filter options -->
@@ -268,7 +274,7 @@ role_e role;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 06:31:26 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 21:22:11 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
