@@ -61,7 +61,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><pre class="fragment">
 <span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
-<span class="comment"> </span>
+<span class="comment"></span>
 <span class="comment"> This program is free software; you can redistribute it and/or</span>
 <span class="comment"> modify it under the terms of the GNU General Public License</span>
 <span class="comment"> version 2 as published by the Free Software Foundation.</span>
@@ -96,15 +96,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <span class="comment">//</span>
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
-  
+
   Serial.begin(57600);
   printf_begin();
   printf(<span class="stringliteral">&quot;\n\rRF24/examples/scanner/\n\r&quot;</span>);
-  
+
   <span class="comment">//</span>
   <span class="comment">// Setup and configure rf radio</span>
   <span class="comment">//</span>
-  
+
   radio.begin();
   radio.setAutoAck(<span class="keyword">false</span>);
 
@@ -112,7 +112,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   radio.startListening();
   radio.stopListening();
 
-  <span class="comment">// Print out header, high then low digit </span>
+  <span class="comment">// Print out header, high then low digit</span>
   <span class="keywordtype">int</span> i = 0;
   <span class="keywordflow">while</span> ( i &lt; num_channels )
   {
@@ -137,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <span class="keywordtype">void</span> loop(<span class="keywordtype">void</span>)
 {
-  <span class="comment">// Clear measurement values </span>
+  <span class="comment">// Clear measurement values</span>
   memset(values,0,num_channels);
 
   <span class="comment">// Scan all channels num_reps times</span>
@@ -161,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     }
   }
 
-  <span class="comment">// Print out channel measurements, clamped to a single hex digit </span>
+  <span class="comment">// Print out channel measurements, clamped to a single hex digit</span>
   <span class="keywordtype">int</span> i = 0;
   <span class="keywordflow">while</span> ( i &lt; num_channels )
   {
@@ -188,7 +188,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 21:22:11 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 8 2011 22:17:47 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

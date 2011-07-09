@@ -60,7 +60,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role_pin tied to ground. The ping senders are further differentiated by a byte in eeprom.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
-<span class="comment"> </span>
+<span class="comment"></span>
 <span class="comment"> This program is free software; you can redistribute it and/or</span>
 <span class="comment"> modify it under the terms of the GNU General Public License</span>
 <span class="comment"> version 2 as published by the Free Software Foundation.</span>
@@ -133,12 +133,12 @@ uint8_t node_address;
   <span class="comment">//</span>
   <span class="comment">// Role</span>
   <span class="comment">//</span>
-  
+
   <span class="comment">// set up the role pin</span>
   pinMode(role_pin, INPUT);
   digitalWrite(role_pin,HIGH);
   delay(20); <span class="comment">// Just to get a solid reading on the role pin</span>
-  
+
   <span class="comment">// read the address pin, establish our role</span>
   <span class="keywordflow">if</span> ( digitalRead(role_pin) )
     role = role_ping_out;
@@ -160,7 +160,7 @@ uint8_t node_address;
     <span class="comment">// address.</span>
     <span class="keywordflow">if</span> ( reading &gt;= 2 &amp;&amp; reading &lt;= 6 )
       node_address = reading;
-    
+
     <span class="comment">// Otherwise, it is invalid, so set our address AND ROLE to &#39;invalid&#39;</span>
     <span class="keywordflow">else</span>
     {
@@ -172,7 +172,7 @@ uint8_t node_address;
   <span class="comment">//</span>
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
-  
+
   Serial.begin(57600);
   printf_begin();
   printf(<span class="stringliteral">&quot;\n\rRF24/examples/starping/\n\r&quot;</span>);
@@ -182,7 +182,7 @@ uint8_t node_address;
   <span class="comment">//</span>
   <span class="comment">// Setup and configure rf radio</span>
   <span class="comment">//</span>
-  
+
   radio.begin();
 
   <span class="comment">//</span>
@@ -199,27 +199,27 @@ uint8_t node_address;
     radio.openReadingPipe(4,talking_pipes[3]);
     radio.openReadingPipe(5,talking_pipes[4]);
   }
-  
-  <span class="comment">// Each ping node has a talking pipe that it will ping into, and a listening </span>
-  <span class="comment">// pipe that it will listen for the pong.  </span>
+
+  <span class="comment">// Each ping node has a talking pipe that it will ping into, and a listening</span>
+  <span class="comment">// pipe that it will listen for the pong.</span>
   <span class="keywordflow">if</span> ( role == role_ping_out )
   {
     <span class="comment">// Write on our talking pipe</span>
     radio.openWritingPipe(talking_pipes[node_address-2]);
-    <span class="comment">// Listen on our listening pipe </span>
+    <span class="comment">// Listen on our listening pipe</span>
     radio.openReadingPipe(1,listening_pipes[node_address-2]);
   }
 
   <span class="comment">//</span>
   <span class="comment">// Start listening</span>
   <span class="comment">//</span>
-  
+
   radio.startListening();
-  
+
   <span class="comment">//</span>
   <span class="comment">// Dump the configuration of the rf unit for debugging</span>
   <span class="comment">//</span>
-  
+
   radio.printDetails();
 
   <span class="comment">//</span>
@@ -237,27 +237,27 @@ uint8_t node_address;
   <span class="comment">//</span>
   <span class="comment">// Ping out role.  Repeatedly send the current time</span>
   <span class="comment">//</span>
-  
+
   <span class="keywordflow">if</span> (role == role_ping_out)
   {
     <span class="comment">// First, stop listening so we can talk.</span>
     radio.stopListening();
-    
+
     <span class="comment">// Take the time, and send it.  This will block until complete</span>
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> time = millis();
     printf(<span class="stringliteral">&quot;Now sending %lu...&quot;</span>,time);
-    radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
-    
+    radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
+
     <span class="comment">// Now, continue listening</span>
     radio.startListening();
-    
+
     <span class="comment">// Wait here until we get a response, or timeout (250ms)</span>
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> started_waiting_at = millis();
     <span class="keywordtype">bool</span> timeout = <span class="keyword">false</span>;
     <span class="keywordflow">while</span> ( ! radio.available() &amp;&amp; ! timeout )
       <span class="keywordflow">if</span> (millis() - started_waiting_at &gt; 250 )
         timeout = <span class="keyword">true</span>;
-    
+
     <span class="comment">// Describe the results</span>
     <span class="keywordflow">if</span> ( timeout )
     {
@@ -268,19 +268,19 @@ uint8_t node_address;
       <span class="comment">// Grab the response, compare, and send to debugging spew</span>
       <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> got_time;
       radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
-  
+
       <span class="comment">// Spew it</span>
       printf(<span class="stringliteral">&quot;Got response %lu, round-trip delay: %lu\n\r&quot;</span>,got_time,millis()-got_time);
     }
-    
+
     <span class="comment">// Try again 1s later</span>
     delay(1000);
   }
-  
+
   <span class="comment">//</span>
   <span class="comment">// Pong back role.  Receive each packet, dump it out, and send it back</span>
   <span class="comment">//</span>
-  
+
   <span class="keywordflow">if</span> ( role == role_pong_back )
   {
     <span class="comment">// if there is data ready</span>
@@ -294,11 +294,11 @@ uint8_t node_address;
       {
         <span class="comment">// Fetch the payload, and see if this was the last one.</span>
         done = radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
-  
+
         <span class="comment">// Spew it</span>
         printf(<span class="stringliteral">&quot;Got payload %lu from node %i...&quot;</span>,got_time,pipe_num+1);
       }
-      
+
       <span class="comment">// First, stop listening so we can talk</span>
       radio.stopListening();
 
@@ -307,11 +307,11 @@ uint8_t node_address;
 
       <span class="comment">// Retain the low 2 bytes to identify the pipe for the spew</span>
       uint16_t pipe_id = listening_pipes[pipe_num-1] &amp; 0xffff;
-            
+
       <span class="comment">// Send the final one back.</span>
-      radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
+      radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
       printf(<span class="stringliteral">&quot;Sent response to %04x.\n\r&quot;</span>,pipe_id);
-      
+
       <span class="comment">// Now, resume listening so we catch the next packets.</span>
       radio.startListening();
     }
@@ -352,7 +352,7 @@ uint8_t node_address;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 21:22:11 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 8 2011 22:17:47 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

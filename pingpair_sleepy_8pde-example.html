@@ -59,7 +59,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> class to create a battery- efficient system. It is just like the pingpair.pde example, but the ping node powers down the radio and sleeps the MCU after every ping/pong cycle.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
 <span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
-<span class="comment"> </span>
+<span class="comment"></span>
 <span class="comment"> This program is free software; you can redistribute it and/or</span>
 <span class="comment"> modify it under the terms of the GNU General Public License</span>
 <span class="comment"> version 2 as published by the Free Software Foundation.</span>
@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
 
 <span class="comment">// sets the role of this unit in hardware.  Connect to GND to be the &#39;pong&#39; receiver</span>
-<span class="comment">// Leave open to be the &#39;ping&#39; transmitter </span>
+<span class="comment">// Leave open to be the &#39;ping&#39; transmitter</span>
 <span class="keyword">const</span> <span class="keywordtype">int</span> role_pin = 7;
 
 <span class="comment">//</span>
@@ -131,12 +131,12 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Role</span>
   <span class="comment">//</span>
-  
+
   <span class="comment">// set up the role pin</span>
   pinMode(role_pin, INPUT);
   digitalWrite(role_pin,HIGH);
   delay(20); <span class="comment">// Just to get a solid reading on the role pin</span>
-  
+
   <span class="comment">// read the address pin, establish our role</span>
   <span class="keywordflow">if</span> ( digitalRead(role_pin) )
     role = role_ping_out;
@@ -146,7 +146,7 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Print preamble</span>
   <span class="comment">//</span>
-  
+
   Serial.begin(57600);
   printf_begin();
   printf(<span class="stringliteral">&quot;\n\rRF24/examples/pingpair_sleepy/\n\r&quot;</span>);
@@ -163,18 +163,18 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Setup and configure rf radio</span>
   <span class="comment">//</span>
-  
+
   radio.begin();
 
   <span class="comment">//</span>
   <span class="comment">// Open pipes to other nodes for communication</span>
   <span class="comment">//</span>
-  
+
   <span class="comment">// This simple sketch opens two pipes for these two nodes to communicate</span>
   <span class="comment">// back and forth.</span>
   <span class="comment">// Open &#39;our&#39; pipe for writing</span>
   <span class="comment">// Open the &#39;other&#39; pipe for reading, in position #1 (we can have up to 5 pipes open for reading)</span>
-  
+
   <span class="keywordflow">if</span> ( role == role_ping_out )
   {
     radio.openWritingPipe(pipes[0]);
@@ -189,13 +189,13 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Start listening</span>
   <span class="comment">//</span>
-  
+
   radio.startListening();
-  
+
   <span class="comment">//</span>
   <span class="comment">// Dump the configuration of the rf unit for debugging</span>
   <span class="comment">//</span>
-  
+
   radio.printDetails();
 }
 
@@ -204,27 +204,27 @@ role_e role;
   <span class="comment">//</span>
   <span class="comment">// Ping out role.  Repeatedly send the current time</span>
   <span class="comment">//</span>
-  
+
   <span class="keywordflow">if</span> (role == role_ping_out)
   {
     <span class="comment">// First, stop listening so we can talk.</span>
     radio.stopListening();
-    
+
     <span class="comment">// Take the time, and send it.  This will block until complete</span>
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> time = millis();
     printf(<span class="stringliteral">&quot;Now sending %lu...&quot;</span>,time);
-    radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
-    
+    radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
+
     <span class="comment">// Now, continue listening</span>
     radio.startListening();
-    
+
     <span class="comment">// Wait here until we get a response, or timeout (250ms)</span>
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> started_waiting_at = millis();
     <span class="keywordtype">bool</span> timeout = <span class="keyword">false</span>;
     <span class="keywordflow">while</span> ( ! radio.available() &amp;&amp; ! timeout )
       <span class="keywordflow">if</span> (millis() - started_waiting_at &gt; 250 )
         timeout = <span class="keyword">true</span>;
-    
+
     <span class="comment">// Describe the results</span>
     <span class="keywordflow">if</span> ( timeout )
     {
@@ -235,11 +235,11 @@ role_e role;
       <span class="comment">// Grab the response, compare, and send to debugging spew</span>
       <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> got_time;
       radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
-  
+
       <span class="comment">// Spew it</span>
       printf(<span class="stringliteral">&quot;Got response %lu, round-trip delay: %lu\n\r&quot;</span>,got_time,millis()-got_time);
     }
-  
+
     <span class="comment">//</span>
     <span class="comment">// Shut down the system</span>
     <span class="comment">//</span>
@@ -255,16 +255,16 @@ role_e role;
     <span class="comment">// continue execution here.</span>
     <span class="keywordflow">while</span>( sleep_cycles_remaining )
       do_sleep();
-    
+
     sleep_cycles_remaining = sleep_cycles_per_transmission;
   }
-  
+
   <span class="comment">//</span>
   <span class="comment">// Pong back role.  Receive each packet, dump it out, and send it back</span>
   <span class="comment">//</span>
   <span class="comment">// This is untouched from the pingpair example.</span>
   <span class="comment">//</span>
-  
+
   <span class="keywordflow">if</span> ( role == role_pong_back )
   {
     <span class="comment">// if there is data ready</span>
@@ -277,19 +277,19 @@ role_e role;
       {
         <span class="comment">// Fetch the payload, and see if this was the last one.</span>
         done = radio.read( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
-  
+
         <span class="comment">// Spew it.  Include our time, because the ping_out millis counter is unreliable</span>
         <span class="comment">// due to it sleeping</span>
         printf(<span class="stringliteral">&quot;Got payload %lu @ %lu...&quot;</span>,got_time,millis());
       }
-      
+
       <span class="comment">// First, stop listening so we can talk</span>
       radio.stopListening();
-            
+
       <span class="comment">// Send the final one back.</span>
-      radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );  
+      radio.write( &amp;got_time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
       printf(<span class="stringliteral">&quot;Sent response.\n\r&quot;</span>);
-      
+
       <span class="comment">// Now, resume listening so we catch the next packets.</span>
       radio.startListening();
     }
@@ -297,36 +297,37 @@ role_e role;
 }
 
 <span class="comment">//</span>
-<span class="comment">// Sleep helpers </span>
+<span class="comment">// Sleep helpers</span>
 <span class="comment">//</span>
 
 <span class="comment">// 0=16ms, 1=32ms,2=64ms,3=125ms,4=250ms,5=500ms</span>
 <span class="comment">// 6=1 sec,7=2 sec, 8=4 sec, 9= 8sec</span>
 
-<span class="keywordtype">void</span> setup_watchdog(uint8_t prescalar) 
+<span class="keywordtype">void</span> setup_watchdog(uint8_t prescalar)
 {
-    prescalar = min(9,prescalar);
-    uint8_t wdtcsr = prescalar &amp; 7;
-    <span class="keywordflow">if</span> ( prescalar &amp; 8 )
-        wdtcsr |= _BV(WDP3);
+  prescalar = min(9,prescalar);
+  uint8_t wdtcsr = prescalar &amp; 7;
+  <span class="keywordflow">if</span> ( prescalar &amp; 8 )
+    wdtcsr |= _BV(WDP3);
 
-    MCUSR &amp;= ~_BV(WDRF);
-    WDTCSR = _BV(WDCE) | _BV(WDE);
-    WDTCSR = _BV(WDCE) | wdtcsr | _BV(WDIE);
+  MCUSR &amp;= ~_BV(WDRF);
+  WDTCSR = _BV(WDCE) | _BV(WDE);
+  WDTCSR = _BV(WDCE) | wdtcsr | _BV(WDIE);
 }
 
-ISR(WDT_vect) {
+ISR(WDT_vect)
+{
   --sleep_cycles_remaining;
 }
 
 <span class="keywordtype">void</span> do_sleep(<span class="keywordtype">void</span>)
 {
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN); <span class="comment">// sleep mode is set here</span>
-    sleep_enable();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); <span class="comment">// sleep mode is set here</span>
+  sleep_enable();
 
-    sleep_mode();                        <span class="comment">// System sleeps here</span>
+  sleep_mode();                        <span class="comment">// System sleeps here</span>
 
-    sleep_disable();                     <span class="comment">// System continues execution here when watchdog timed out </span>
+  sleep_disable();                     <span class="comment">// System continues execution here when watchdog timed out</span>
 }
 
 <span class="comment">// vim:ai:cin:sts=2 sw=2 ft=cpp</span>
@@ -346,7 +347,7 @@ ISR(WDT_vect) {
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 28 2011 21:22:11 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 8 2011 22:17:47 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
