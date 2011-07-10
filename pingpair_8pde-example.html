@@ -149,6 +149,10 @@ role_e role;
   <span class="comment">// optionally, increase the CRC length for improved reliability</span>
   radio.setCRCLength(RF24_CRC_16);
 
+  <span class="comment">// optionally, reduce the payload size.  seems to</span>
+  <span class="comment">// improve reliability</span>
+  radio.setPayloadSize(8);
+
   <span class="comment">//</span>
   <span class="comment">// Open pipes to other nodes for communication</span>
   <span class="comment">//</span>
@@ -238,7 +242,7 @@ role_e role;
     {
       <span class="comment">// Dump the payloads until we&#39;ve gotten everything</span>
       <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> got_time;
-      <span class="keywordtype">boolean</span> done = <span class="keyword">false</span>;
+      <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;
       <span class="keywordflow">while</span> (!done)
       {
         <span class="comment">// Fetch the payload, and see if this was the last one.</span>
@@ -277,7 +281,7 @@ role_e role;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 8 2011 22:17:47 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun Jul 10 2011 08:22:39 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

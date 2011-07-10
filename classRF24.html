@@ -83,12 +83,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Start listening on the pipes opened for reading.  <a href="#a30a2733a3889bdc331fe2d2f4f0f7b39"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a6f144d73fc447c8ac2d1a4166210fd88">stopListening</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop listening for incoming messages.  <a href="#a6f144d73fc447c8ac2d1a4166210fd88"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b">write</a> (const void *buf, uint8_t len)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to the open writing pipe.  <a href="#a26d6e40037b0be75b463ed5db4a4867b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a1dd4d108cb2197869a83100c64641b4f">available</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there are bytes available to be read.  <a href="#a1dd4d108cb2197869a83100c64641b4f"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ad1e4c4aeebf3c85c6aef3248a5afd6f2">read</a> (void *buf, uint8_t len)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the payload.  <a href="#ad1e4c4aeebf3c85c6aef3248a5afd6f2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58">write</a> (const void *buf, uint8_t len)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to the open writing pipe.  <a href="#a4cd4c198a47704db20b6b5cf0731cd58"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a127105eb7a3b351cfe777c1cec50627a">available</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there are bytes available to be read.  <a href="#a127105eb7a3b351cfe777c1cec50627a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a391eb0016877ec7486936795aed3b5ee">read</a> (void *buf, uint8_t len)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the payload.  <a href="#a391eb0016877ec7486936795aed3b5ee"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77">openWritingPipe</a> (uint64_t address)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a pipe for writing.  <a href="#a50c8e68ee840e1860a31dbdc83afbd77"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45">openReadingPipe</a> (uint8_t number, uint64_t address)</td></tr>
@@ -101,29 +101,33 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a5e6e5a5f6c85d2638381cab2c0f3702e">setChannel</a> (uint8_t channel)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set RF communication channel.  <a href="#a5e6e5a5f6c85d2638381cab2c0f3702e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f">setPayloadSize</a> (uint8_t size)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Payload Size.  <a href="#a343e5d23477181011dea030fafb1954f"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Static Payload Size.  <a href="#a343e5d23477181011dea030fafb1954f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1">getPayloadSize</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Payload Size.  <a href="#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Static Payload Size.  <a href="#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a65963ed8d8fd45f847e2f673995b85e1">getDynamicPayloadSize</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Dynamic Payload Size.  <a href="#a65963ed8d8fd45f847e2f673995b85e1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#adc95213ed4c8569a90eb33122e16cea6">printDetails</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a giant block of debugging information to stdout.  <a href="#adc95213ed4c8569a90eb33122e16cea6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aa0a51923a09ba4f3478aba9be0f8a6a1">powerDown</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter low-power mode.  <a href="#aa0a51923a09ba4f3478aba9be0f8a6a1"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a1d3d998205ea62175e8ef5afd580a313">available</a> (uint8_t *pipe_num)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there are bytes available to be read.  <a href="#a1d3d998205ea62175e8ef5afd580a313"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ace7dd139fabc16b77cb8325faa07620f">available</a> (uint8_t *pipe_num)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there are bytes available to be read.  <a href="#ace7dd139fabc16b77cb8325faa07620f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a9e011d4dfa89a2b06f47b7e0a97d9b42">startWrite</a> (const void *buf, uint8_t len)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-blocking write to the open writing pipe.  <a href="#a9e011d4dfa89a2b06f47b7e0a97d9b42"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#abf8efced2ee9edbcc6510878b20edc1b">enableAckPayload</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable custom payloads on the acknowledge packets.  <a href="#abf8efced2ee9edbcc6510878b20edc1b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a443888504975d7441d6452a09d09a8fa">enableDynamicPayloads</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable dynamically-sized payloads.  <a href="#a443888504975d7441d6452a09d09a8fa"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a65619238c25036c3de72dc2c1a1c6e52">writeAckPayload</a> (uint8_t pipe, const void *buf, uint8_t len)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an ack payload for the specified pipe.  <a href="#a65619238c25036c3de72dc2c1a1c6e52"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a781300b4d80b1b86f1b728c68476016f">isAckPayloadAvailable</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if an ack payload was received in the most recent call to <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.  <a href="#a781300b4d80b1b86f1b728c68476016f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a30c2736fd0df9c8128cef408c8b88e92">isAckPayloadAvailable</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if an ack payload was received in the most recent call to <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>.  <a href="#a30c2736fd0df9c8128cef408c8b88e92"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#afb97dc4bdf4d2d84ea44060ac5b4ed89">whatHappened</a> (bool &amp;tx_ok, bool &amp;tx_fail, bool &amp;rx_ready)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this when you get an interrupt to find out why.  <a href="#afb97dc4bdf4d2d84ea44060ac5b4ed89"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aec71746d59da978bcbb975167886a2cc">setAutoAck</a> (bool enable)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable auto-acknowlede packets.  <a href="#aec71746d59da978bcbb975167886a2cc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a90f59c82e998718a4ec6245d007d9694">testCarrier</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there was a carrier on the line for the previous listening period.  <a href="#a90f59c82e998718a4ec6245d007d9694"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ad0d522ccf39493510e64bf1740be790d">testCarrier</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there was a carrier on the line for the previous listening period.  <a href="#ad0d522ccf39493510e64bf1740be790d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a575cf2725afe0f787e30acb9b12b3200">setDataRate</a> (rf24_datarate_e speed)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the transmission data rate.  <a href="#a575cf2725afe0f787e30acb9b12b3200"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a89f626fc4a58dd997153bcc0f8198b9e">setCRCLength</a> (rf24_crclength_e length)</td></tr>
@@ -150,8 +154,6 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the transmit payload.  <a href="#a8485d6059fc9b73263f33087bdb0fd66"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a378bc02d32cc90927ae734b8aa4110e1">read_payload</a> (void *buf, uint8_t len)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the receive payload.  <a href="#a378bc02d32cc90927ae734b8aa4110e1"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a3cda12e3947b88c428f64a1916e086fa">read_payload_length</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the payload length.  <a href="#a3cda12e3947b88c428f64a1916e086fa"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a575c061519e7820e1850ad380c617d95">flush_rx</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty the receive buffer.  <a href="#a575c061519e7820e1850ad380c617d95"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#adb7915b1d2661a82137573344f659e81">flush_tx</a> (void)</td></tr>
@@ -213,12 +215,12 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a1dd4d108cb2197869a83100c64641b4f"></a><!-- doxytag: member="RF24::available" ref="a1dd4d108cb2197869a83100c64641b4f" args="(void)" -->
+<a class="anchor" id="a127105eb7a3b351cfe777c1cec50627a"></a><!-- doxytag: member="RF24::available" ref="a127105eb7a3b351cfe777c1cec50627a" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::available </td>
+          <td class="memname">bool RF24::available </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -233,12 +235,12 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1d3d998205ea62175e8ef5afd580a313"></a><!-- doxytag: member="RF24::available" ref="a1d3d998205ea62175e8ef5afd580a313" args="(uint8_t *pipe_num)" -->
+<a class="anchor" id="ace7dd139fabc16b77cb8325faa07620f"></a><!-- doxytag: member="RF24::available" ref="ace7dd139fabc16b77cb8325faa07620f" args="(uint8_t *pipe_num)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::available </td>
+          <td class="memname">bool RF24::available </td>
           <td>(</td>
           <td class="paramtype">uint8_t *&#160;</td>
           <td class="paramname"><em>pipe_num</em></td><td>)</td>
@@ -351,6 +353,27 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a443888504975d7441d6452a09d09a8fa"></a><!-- doxytag: member="RF24::enableDynamicPayloads" ref="a443888504975d7441d6452a09d09a8fa" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::enableDynamicPayloads </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Enable dynamically-sized payloads. </p>
+<p>This way you don't always have to send large packets just to send them once in a while. This enables dynamic payloads on ALL pipes.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd>examples/pingpair_pl/pingpair_dyn.pde </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a575c061519e7820e1850ad380c617d95"></a><!-- doxytag: member="RF24::flush_rx" ref="a575c061519e7820e1850ad380c617d95" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
@@ -411,6 +434,27 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a65963ed8d8fd45f847e2f673995b85e1"></a><!-- doxytag: member="RF24::getDynamicPayloadSize" ref="a65963ed8d8fd45f847e2f673995b85e1" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t RF24::getDynamicPayloadSize </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get Dynamic Payload Size. </p>
+<p>For dynamic payloads, this pulls the size of the payload off the chip</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Payload length of last-received dynamic payload </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a0aa0c7cbe3d38fef4722f3f1d2d6c5f1"></a><!-- doxytag: member="RF24::getPayloadSize" ref="a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
@@ -426,18 +470,18 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Get Payload Size. </p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f" title="Set Payload Size.">setPayloadSize()</a></dd></dl>
+<p>Get Static Payload Size. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f" title="Set Static Payload Size.">setPayloadSize()</a></dd></dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The number of bytes in the payload </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a781300b4d80b1b86f1b728c68476016f"></a><!-- doxytag: member="RF24::isAckPayloadAvailable" ref="a781300b4d80b1b86f1b728c68476016f" args="(void)" -->
+<a class="anchor" id="a30c2736fd0df9c8128cef408c8b88e92"></a><!-- doxytag: member="RF24::isAckPayloadAvailable" ref="a30c2736fd0df9c8128cef408c8b88e92" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::isAckPayloadAvailable </td>
+          <td class="memname">bool RF24::isAckPayloadAvailable </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -447,8 +491,8 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Determine if an ack payload was received in the most recent call to <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>. </p>
-<p>Call <a class="el" href="classRF24.html#ad1e4c4aeebf3c85c6aef3248a5afd6f2" title="Read the payload.">read()</a> to retrieve the ack payload.</p>
+<p>Determine if an ack payload was received in the most recent call to <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>. </p>
+<p>Call <a class="el" href="classRF24.html#a391eb0016877ec7486936795aed3b5ee" title="Read the payload.">read()</a> to retrieve the ack payload.</p>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>Calling this function clears the internal flag which indicates a payload is available. If it returns true, you must read the packet out as the very next interaction with the radio, or the results are undefined.</dd></dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>True if an ack payload is available. </dd></dl>
 
@@ -486,7 +530,7 @@ Protected Member Functions</h2></td></tr>
    <a class="code" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe</a>(2,0xF0F0F0F066);
 </pre></div></dd>
 <dd>
-Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and then <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>, it will overwrite the writing pipe. Ergo, do an <a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe()</a> again before <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.</dd></dl>
+Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and then <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>, it will overwrite the writing pipe. Ergo, do an <a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe()</a> again before <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>.</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Enforce the restriction that pipes 1-5 must share the top 32 bits</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -542,7 +586,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Enter low-power mode. </p>
-<p>To return to normal power mode, either <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a> some data or <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>. </p>
+<p>To return to normal power mode, either <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a> some data or <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>. </p>
 
 </div>
 </div>
@@ -706,12 +750,12 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
-<a class="anchor" id="ad1e4c4aeebf3c85c6aef3248a5afd6f2"></a><!-- doxytag: member="RF24::read" ref="ad1e4c4aeebf3c85c6aef3248a5afd6f2" args="(void *buf, uint8_t len)" -->
+<a class="anchor" id="a391eb0016877ec7486936795aed3b5ee"></a><!-- doxytag: member="RF24::read" ref="a391eb0016877ec7486936795aed3b5ee" args="(void *buf, uint8_t len)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::read </td>
+          <td class="memname">bool RF24::read </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
@@ -733,7 +777,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 <p>Read the payload. </p>
 <p>Return the last payload received</p>
-<p>The size of data read is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Payload Size.">getPayloadSize()</a></p>
+<p>The size of data read is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Static Payload Size.">getPayloadSize()</a></p>
 <dl class="note"><dt><b>Note:</b></dt><dd>I specifically chose 'void*' as a data type to make it easier for beginners to use. No casting needed.</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -772,7 +816,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Read the receive payload. </p>
-<p>The size of data read is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Payload Size.">getPayloadSize()</a></p>
+<p>The size of data read is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Static Payload Size.">getPayloadSize()</a></p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>Where to put the data </td></tr>
@@ -781,27 +825,6 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Current value of status register </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a3cda12e3947b88c428f64a1916e086fa"></a><!-- doxytag: member="RF24::read_payload_length" ref="a3cda12e3947b88c428f64a1916e086fa" args="(void)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t RF24::read_payload_length </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Read the payload length. </p>
-<p>For dynamic payloads, this pulls the size of the payload off the chip</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Payload length of last-received dynamic payload </dd></dl>
 
 </div>
 </div>
@@ -991,8 +1014,8 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 </div>
 <div class="memdoc">
 
-<p>Set Payload Size. </p>
-<p>This implementation uses a pre-stablished fixed payload size for all transmissions. If this method is never called, the driver will always transmit the maximum payload size (32 bytes), no matter how much was sent to <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>.</p>
+<p>Set Static Payload Size. </p>
+<p>This implementation uses a pre-stablished fixed payload size for all transmissions. If this method is never called, the driver will always transmit the maximum payload size (32 bytes), no matter how much was sent to <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>.</p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Implement variable-sized payloads feature</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -1055,7 +1078,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Start listening on the pipes opened for reading. </p>
-<p>Be sure to call <a class="el" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe()</a> first. Do not call <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a> while in this mode, without first calling <a class="el" href="classRF24.html#a6f144d73fc447c8ac2d1a4166210fd88" title="Stop listening for incoming messages.">stopListening()</a>. Call isAvailable() to check for incoming traffic, and <a class="el" href="classRF24.html#ad1e4c4aeebf3c85c6aef3248a5afd6f2" title="Read the payload.">read()</a> to get it. </p>
+<p>Be sure to call <a class="el" href="classRF24.html#aa7e8523f86f9f8f20c274e0c89a5fd45" title="Open a pipe for reading.">openReadingPipe()</a> first. Do not call <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a> while in this mode, without first calling <a class="el" href="classRF24.html#a6f144d73fc447c8ac2d1a4166210fd88" title="Stop listening for incoming messages.">stopListening()</a>. Call isAvailable() to check for incoming traffic, and <a class="el" href="classRF24.html#a391eb0016877ec7486936795aed3b5ee" title="Read the payload.">read()</a> to get it. </p>
 
 </div>
 </div>
@@ -1085,8 +1108,8 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Non-blocking write to the open writing pipe. </p>
-<p>Just like <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>, but it returns immediately. To find out what happened to the send, catch the IRQ and then call <a class="el" href="classRF24.html#afb97dc4bdf4d2d84ea44060ac5b4ed89" title="Call this when you get an interrupt to find out why.">whatHappened()</a>.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a> </dd>
+<p>Just like <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>, but it returns immediately. To find out what happened to the send, catch the IRQ and then call <a class="el" href="classRF24.html#afb97dc4bdf4d2d84ea44060ac5b4ed89" title="Call this when you get an interrupt to find out why.">whatHappened()</a>.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a> </dd>
 <dd>
 <a class="el" href="classRF24.html#afb97dc4bdf4d2d84ea44060ac5b4ed89" title="Call this when you get an interrupt to find out why.">whatHappened()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
@@ -1116,16 +1139,16 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Stop listening for incoming messages. </p>
-<p>Do this before calling <a class="el" href="classRF24.html#a26d6e40037b0be75b463ed5db4a4867b" title="Write to the open writing pipe.">write()</a>. </p>
+<p>Do this before calling <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>. </p>
 
 </div>
 </div>
-<a class="anchor" id="a90f59c82e998718a4ec6245d007d9694"></a><!-- doxytag: member="RF24::testCarrier" ref="a90f59c82e998718a4ec6245d007d9694" args="(void)" -->
+<a class="anchor" id="ad0d522ccf39493510e64bf1740be790d"></a><!-- doxytag: member="RF24::testCarrier" ref="ad0d522ccf39493510e64bf1740be790d" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::testCarrier </td>
+          <td class="memname">bool RF24::testCarrier </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -1205,12 +1228,12 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
-<a class="anchor" id="a26d6e40037b0be75b463ed5db4a4867b"></a><!-- doxytag: member="RF24::write" ref="a26d6e40037b0be75b463ed5db4a4867b" args="(const void *buf, uint8_t len)" -->
+<a class="anchor" id="a4cd4c198a47704db20b6b5cf0731cd58"></a><!-- doxytag: member="RF24::write" ref="a4cd4c198a47704db20b6b5cf0731cd58" args="(const void *buf, uint8_t len)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RF24::write </td>
+          <td class="memname">bool RF24::write </td>
           <td>(</td>
           <td class="paramtype">const void *&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
@@ -1233,7 +1256,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <p>Write to the open writing pipe. </p>
 <p>Be sure to call <a class="el" href="classRF24.html#a50c8e68ee840e1860a31dbdc83afbd77" title="Open a pipe for writing.">openWritingPipe()</a> first to set the destination of where to write to.</p>
 <p>This blocks until the message is successfully acknowledged by the receiver or the timeout/retransmit maxima are reached. In the current configuration, the max delay here is 60ms.</p>
-<p>The maximum size of data written is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Payload Size.">getPayloadSize()</a>. However, you can write less, and the remainder will just be filled with zeroes.</p>
+<p>The maximum size of data written is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Static Payload Size.">getPayloadSize()</a>. However, you can write less, and the remainder will just be filled with zeroes.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>Pointer to the data to be sent </td></tr>
@@ -1271,7 +1294,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Write the transmit payload. </p>
-<p>The size of data written is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Payload Size.">getPayloadSize()</a></p>
+<p>The size of data written is the fixed payload size, see <a class="el" href="classRF24.html#a0aa0c7cbe3d38fef4722f3f1d2d6c5f1" title="Get Static Payload Size.">getPayloadSize()</a></p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>Where to get the data </td></tr>
@@ -1402,7 +1425,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
   <table class="params">
     <tr><td class="paramname">pipe</td><td>Which pipe# (typically 1-5) will get this response. </td></tr>
     <tr><td class="paramname">buf</td><td>Pointer to data that is sent </td></tr>
-    <tr><td class="paramname">len</td><td>Length of the data to send, up to 32 bytes max. Not affected by the static payload set by <a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f" title="Set Payload Size.">setPayloadSize()</a>. </td></tr>
+    <tr><td class="paramname">len</td><td>Length of the data to send, up to 32 bytes max. Not affected by the static payload set by <a class="el" href="classRF24.html#a343e5d23477181011dea030fafb1954f" title="Set Static Payload Size.">setPayloadSize()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1427,7 +1450,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 8 2011 22:17:47 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun Jul 10 2011 08:22:39 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
