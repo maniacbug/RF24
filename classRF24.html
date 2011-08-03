@@ -110,6 +110,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a giant block of debugging information to stdout.  <a href="#adc95213ed4c8569a90eb33122e16cea6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aa0a51923a09ba4f3478aba9be0f8a6a1">powerDown</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter low-power mode.  <a href="#aa0a51923a09ba4f3478aba9be0f8a6a1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a5cdaf47aa0edd6dca1b9a8bb7972a1a3">powerUp</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Leave low-power mode - making radio more responsive.  <a href="#a5cdaf47aa0edd6dca1b9a8bb7972a1a3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ace7dd139fabc16b77cb8325faa07620f">available</a> (uint8_t *pipe_num)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there are bytes available to be read.  <a href="#ace7dd139fabc16b77cb8325faa07620f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a9e011d4dfa89a2b06f47b7e0a97d9b42">startWrite</a> (const void *buf, uint8_t len)</td></tr>
@@ -122,16 +124,30 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an ack payload for the specified pipe.  <a href="#a65619238c25036c3de72dc2c1a1c6e52"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a30c2736fd0df9c8128cef408c8b88e92">isAckPayloadAvailable</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if an ack payload was received in the most recent call to <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a>.  <a href="#a30c2736fd0df9c8128cef408c8b88e92"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a62846750b82682beb7593719eb60ed60">isPVariant</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether the hardware is an nRF24L01+ or not.  <a href="#a62846750b82682beb7593719eb60ed60"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#afb97dc4bdf4d2d84ea44060ac5b4ed89">whatHappened</a> (bool &amp;tx_ok, bool &amp;tx_fail, bool &amp;rx_ready)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this when you get an interrupt to find out why.  <a href="#afb97dc4bdf4d2d84ea44060ac5b4ed89"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aec71746d59da978bcbb975167886a2cc">setAutoAck</a> (bool enable)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable auto-acknowlede packets.  <a href="#aec71746d59da978bcbb975167886a2cc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a60dba9e558f3620ab489af68ea3dea9c">setAutoAck</a> (uint8_t pipe, bool enable)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable auto-acknowlede packets on a per pipeline basis.  <a href="#a60dba9e558f3620ab489af68ea3dea9c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ad0d522ccf39493510e64bf1740be790d">testCarrier</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether there was a carrier on the line for the previous listening period.  <a href="#ad0d522ccf39493510e64bf1740be790d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a575cf2725afe0f787e30acb9b12b3200">setDataRate</a> (rf24_datarate_e speed)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the transmission data rate.  <a href="#a575cf2725afe0f787e30acb9b12b3200"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a821285f3b54553f4402eb3fd0ac6d6c1">testRPD</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether a signal (carrier or otherwise) greater than or equal to -64dBm is present on the channel.  <a href="#a821285f3b54553f4402eb3fd0ac6d6c1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ae14164610ab5af94cf44b2743daa8dc9">setPALevel</a> (rf24_pa_dbm_e level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Power Amplifier (PA) level to one of four levels.  <a href="#ae14164610ab5af94cf44b2743daa8dc9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">rf24_pa_dbm_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#ac53facef9c62aa82589cf9cc48913267">getPALevel</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetches the current PA level.  <a href="#ac53facef9c62aa82589cf9cc48913267"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#aeb9920e7a95699748b003c4a839b0814">setDataRate</a> (rf24_datarate_e speed)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the transmission data rate.  <a href="#aeb9920e7a95699748b003c4a839b0814"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">rf24_datarate_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a72a7b11dafe8ffab6135f243decce0d7">getDataRate</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetches the transmission data rate.  <a href="#a72a7b11dafe8ffab6135f243decce0d7"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a89f626fc4a58dd997153bcc0f8198b9e">setCRCLength</a> (rf24_crclength_e length)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the CRC length.  <a href="#a89f626fc4a58dd997153bcc0f8198b9e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a5eacd9ecfbc19864801d714c292cf8be">disableCRC</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable CRC validation.  <a href="#a5eacd9ecfbc19864801d714c292cf8be"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Low-level internal interface.</div></td></tr>
@@ -140,8 +156,8 @@ Protected Member Functions</h2></td></tr>
 </div></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a908f250f8f94505baf200e44118737d4">csn</a> (int mode)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set chip select pin.  <a href="#a908f250f8f94505baf200e44118737d4"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a2cf23e4760407ea8bfd60a1a4448cae7">ce</a> (int mode)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set chip enable.  <a href="#a2cf23e4760407ea8bfd60a1a4448cae7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a5e570dd614d5a9d4a2b479ffcbfb2d16">ce</a> (int level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set chip enable.  <a href="#a5e570dd614d5a9d4a2b479ffcbfb2d16"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a56bfead61e647d838cbb5e49def9b6d9">read_register</a> (uint8_t reg, uint8_t *buf, uint8_t len)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a chunk of data in from a register.  <a href="#a56bfead61e647d838cbb5e49def9b6d9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRF24.html#a9a77a59447ca017aa178eb831e52a9e8">read_register</a> (uint8_t reg)</td></tr>
@@ -282,7 +298,7 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2cf23e4760407ea8bfd60a1a4448cae7"></a><!-- doxytag: member="RF24::ce" ref="a2cf23e4760407ea8bfd60a1a4448cae7" args="(int mode)" -->
+<a class="anchor" id="a5e570dd614d5a9d4a2b479ffcbfb2d16"></a><!-- doxytag: member="RF24::ce" ref="a5e570dd614d5a9d4a2b479ffcbfb2d16" args="(int level)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -290,7 +306,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname">void RF24::ce </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
           <td><code> [protected]</code></td>
         </tr>
       </table>
@@ -300,7 +316,7 @@ Protected Member Functions</h2></td></tr>
 <p>Set chip enable. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>HIGH to actively begin transmission or LOW to put in standby. Please see data sheet for a much more detailed description of this pin. </td></tr>
+    <tr><td class="paramname">level</td><td>HIGH to actively begin transmission or LOW to put in standby. Please see data sheet for a much more detailed description of this pin. </td></tr>
   </table>
   </dd>
 </dl>
@@ -323,12 +339,32 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Set chip select pin. </p>
+<p>Running SPI bus at PI_CLOCK_DIV2 so we don't waste time transferring data and best of all, we make use of the radio's FIFO buffers. A lower speed means we're less likely to effectively leverage our FIFOs and pay a higher AVR runtime cost as toll.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">mode</td><td>HIGH to take this unit off the SPI bus, LOW to put it on </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a5eacd9ecfbc19864801d714c292cf8be"></a><!-- doxytag: member="RF24::disableCRC" ref="a5eacd9ecfbc19864801d714c292cf8be" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::disableCRC </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Disable CRC validation. </p>
 
 </div>
 </div>
@@ -434,6 +470,26 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a72a7b11dafe8ffab6135f243decce0d7"></a><!-- doxytag: member="RF24::getDataRate" ref="a72a7b11dafe8ffab6135f243decce0d7" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rf24_datarate_e RF24::getDataRate </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Fetches the transmission data rate. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Returns the hardware's currently configured datarate. The value is one of 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS, as defined in the rf24_datarate_e enum. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a65963ed8d8fd45f847e2f673995b85e1"></a><!-- doxytag: member="RF24::getDynamicPayloadSize" ref="a65963ed8d8fd45f847e2f673995b85e1" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
@@ -452,6 +508,26 @@ Protected Member Functions</h2></td></tr>
 <p>Get Dynamic Payload Size. </p>
 <p>For dynamic payloads, this pulls the size of the payload off the chip</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Payload length of last-received dynamic payload </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac53facef9c62aa82589cf9cc48913267"></a><!-- doxytag: member="RF24::getPALevel" ref="ac53facef9c62aa82589cf9cc48913267" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rf24_pa_dbm_e RF24::getPALevel </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Fetches the current PA level. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Returns a value from the rf24_pa_dbm_e enum describing the current PA setting. Please remember, all values represented by the enum mnemonics are negative dBm. See setPALevel for return value descriptions. </dd></dl>
 
 </div>
 </div>
@@ -495,6 +571,26 @@ Protected Member Functions</h2></td></tr>
 <p>Call <a class="el" href="classRF24.html#a391eb0016877ec7486936795aed3b5ee" title="Read the payload.">read()</a> to retrieve the ack payload.</p>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>Calling this function clears the internal flag which indicates a payload is available. If it returns true, you must read the packet out as the very next interaction with the radio, or the results are undefined.</dd></dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>True if an ack payload is available. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a62846750b82682beb7593719eb60ed60"></a><!-- doxytag: member="RF24::isPVariant" ref="a62846750b82682beb7593719eb60ed60" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RF24::isPVariant </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Determine whether the hardware is an nRF24L01+ or not. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if the hardware is nRF24L01+ (or compatible) and false if its not. </dd></dl>
 
 </div>
 </div>
@@ -586,7 +682,27 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Enter low-power mode. </p>
-<p>To return to normal power mode, either <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a> some data or <a class="el" href="classRF24.html#a30a2733a3889bdc331fe2d2f4f0f7b39" title="Start listening on the pipes opened for reading.">startListening()</a>. </p>
+<p>To return to normal power mode, either <a class="el" href="classRF24.html#a4cd4c198a47704db20b6b5cf0731cd58" title="Write to the open writing pipe.">write()</a> some data or startListening, or <a class="el" href="classRF24.html#a5cdaf47aa0edd6dca1b9a8bb7972a1a3" title="Leave low-power mode - making radio more responsive.">powerUp()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5cdaf47aa0edd6dca1b9a8bb7972a1a3"></a><!-- doxytag: member="RF24::powerUp" ref="a5cdaf47aa0edd6dca1b9a8bb7972a1a3" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::powerUp </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Leave low-power mode - making radio more responsive. </p>
+<p>To return to low power mode, call <a class="el" href="classRF24.html#aa0a51923a09ba4f3478aba9be0f8a6a1" title="Enter low-power mode.">powerDown()</a>. </p>
 
 </div>
 </div>
@@ -924,6 +1040,43 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
+<a class="anchor" id="a60dba9e558f3620ab489af68ea3dea9c"></a><!-- doxytag: member="RF24::setAutoAck" ref="a60dba9e558f3620ab489af68ea3dea9c" args="(uint8_t pipe, bool enable)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::setAutoAck </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pipe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Enable or disable auto-acknowlede packets on a per pipeline basis. </p>
+<p>AA is enabled by default, so it's only needed if you want to turn it off/on for some reason on a per pipeline basis.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pipe</td><td>Which pipeline to modify </td></tr>
+    <tr><td class="paramname">enable</td><td>Whether to enable (true) or disable (false) auto-acks </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a5e6e5a5f6c85d2638381cab2c0f3702e"></a><!-- doxytag: member="RF24::setChannel" ref="a5e6e5a5f6c85d2638381cab2c0f3702e" args="(uint8_t channel)" -->
 <div class="memitem">
 <div class="memproto">
@@ -974,12 +1127,12 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
-<a class="anchor" id="a575cf2725afe0f787e30acb9b12b3200"></a><!-- doxytag: member="RF24::setDataRate" ref="a575cf2725afe0f787e30acb9b12b3200" args="(rf24_datarate_e speed)" -->
+<a class="anchor" id="aeb9920e7a95699748b003c4a839b0814"></a><!-- doxytag: member="RF24::setDataRate" ref="aeb9920e7a95699748b003c4a839b0814" args="(rf24_datarate_e speed)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void RF24::setDataRate </td>
+          <td class="memname">bool RF24::setDataRate </td>
           <td>(</td>
           <td class="paramtype">rf24_datarate_e&#160;</td>
           <td class="paramname"><em>speed</em></td><td>)</td>
@@ -990,9 +1143,37 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 <div class="memdoc">
 
 <p>Set the transmission data rate. </p>
+<dl class="warning"><dt><b>Warning:</b></dt><dd>setting RF24_250KBPS will fail for non-plus units</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">speed</td><td>RF24_1MBPS for 1Mbps or RF24_2MBPS for 2Mbps </td></tr>
+    <tr><td class="paramname">speed</td><td>RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if the change was successful </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae14164610ab5af94cf44b2743daa8dc9"></a><!-- doxytag: member="RF24::setPALevel" ref="ae14164610ab5af94cf44b2743daa8dc9" args="(rf24_pa_dbm_e level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RF24::setPALevel </td>
+          <td>(</td>
+          <td class="paramtype">rf24_pa_dbm_e&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set Power Amplifier (PA) level to one of four levels. </p>
+<p>Relative mnemonics have been used to allow for future PA level changes. According to 6.5 of the nRF24L01+ specification sheet, they translate to: RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>Desired PA level. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1164,6 +1345,28 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
+<a class="anchor" id="a821285f3b54553f4402eb3fd0ac6d6c1"></a><!-- doxytag: member="RF24::testRPD" ref="a821285f3b54553f4402eb3fd0ac6d6c1" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RF24::testRPD </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Test whether a signal (carrier or otherwise) greater than or equal to -64dBm is present on the channel. </p>
+<p>Valid only on nRF24L01P (+) hardware. On nRF24L01, use <a class="el" href="classRF24.html#ad0d522ccf39493510e64bf1740be790d" title="Test whether there was a carrier on the line for the previous listening period.">testCarrier()</a>.</p>
+<p>Useful to check for interference on the current channel and channel hopping strategies.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if signal =&gt; -64dBm, false if not </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a4a22253276f00b24dc8ab9309c03e8da"></a><!-- doxytag: member="RF24::toggle_features" ref="a4a22253276f00b24dc8ab9309c03e8da" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1306,6 +1509,43 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 
 </div>
 </div>
+<a class="anchor" id="a326cd59fa7b61ddbb40e751341fb662d"></a><!-- doxytag: member="RF24::write_register" ref="a326cd59fa7b61ddbb40e751341fb662d" args="(uint8_t reg, uint8_t value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t RF24::write_register </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>reg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Write a single byte to a register. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
+    <tr><td class="paramname">value</td><td>The new value to write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Current value of status register </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af6aa2abd130178de532e9873e906296c"></a><!-- doxytag: member="RF24::write_register" ref="af6aa2abd130178de532e9873e906296c" args="(uint8_t reg, const uint8_t *buf, uint8_t len)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1343,43 +1583,6 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
     <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
     <tr><td class="paramname">buf</td><td>Where to get the data </td></tr>
     <tr><td class="paramname">len</td><td>How many bytes of data to transfer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Current value of status register </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a326cd59fa7b61ddbb40e751341fb662d"></a><!-- doxytag: member="RF24::write_register" ref="a326cd59fa7b61ddbb40e751341fb662d" args="(uint8_t reg, uint8_t value)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t RF24::write_register </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>reg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Write a single byte to a register. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">reg</td><td>Which register. Use constants from <a class="el" href="nRF24L01_8h_source.html">nRF24L01.h</a> </td></tr>
-    <tr><td class="paramname">value</td><td>The new value to write </td></tr>
   </table>
   </dd>
 </dl>
@@ -1450,7 +1653,7 @@ Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and 
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun Jul 10 2011 08:22:39 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 2 2011 21:24:11 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

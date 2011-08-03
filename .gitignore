@@ -2,6 +2,8 @@
 *.bak
 *.o
 .*.swp
+.swp
+tests/
 examples/
 docs/
 Session.vim

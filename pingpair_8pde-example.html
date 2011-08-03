@@ -209,7 +209,7 @@ role_e role;
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> started_waiting_at = millis();
     <span class="keywordtype">bool</span> timeout = <span class="keyword">false</span>;
     <span class="keywordflow">while</span> ( ! radio.available() &amp;&amp; ! timeout )
-      <span class="keywordflow">if</span> (millis() - started_waiting_at &gt; 250 )
+      <span class="keywordflow">if</span> (millis() - started_waiting_at &gt; 200 )
         timeout = <span class="keyword">true</span>;
 
     <span class="comment">// Describe the results</span>
@@ -250,6 +250,10 @@ role_e role;
 
         <span class="comment">// Spew it</span>
         printf(<span class="stringliteral">&quot;Got payload %lu...&quot;</span>,got_time);
+
+        <span class="comment">// Delay just a little bit to let the other unit</span>
+        <span class="comment">// make the transition to receiver</span>
+        delay(20);
       }
 
       <span class="comment">// First, stop listening so we can talk</span>
@@ -281,7 +285,7 @@ role_e role;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun Jul 10 2011 08:22:39 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 2 2011 21:24:11 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
