@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: Related Pages</title>
+<title>RF24: Frequently Asked Questions</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -50,17 +50,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="nav-path" class="navpath">
+    <ul>
+      <li class="navelem"><a class="el" href="index.html">Driver for nRF24L01(+) 2.4GHz Wireless Transceiver</a>      </li>
+    </ul>
+  </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>Related Pages</h1>  </div>
+<h1>Frequently Asked Questions </h1>  </div>
 </div>
 <div class="contents">
-<div class="textblock">Here is a list of all related documentation pages:</div><ul>
-<li><a class="el" href="todo.html">Todo List</a>
-</li>
+<div class="textblock"><p><a class="el" href="FAQ.html#starting">Where do I start?</a></p>
+<p><a class="el" href="FAQ.html#hardware">Where can I buy some hardware?</a></p>
+<p><a class="el" href="FAQ.html#range">What is the range of these units?</a></p>
+<p><a class="el" href="FAQ.html#tests">Why are the examples in the 'tests' directory failing?</a></p>
+<h2><a class="anchor" id="starting"></a>
+Where do I start?</h2>
+<p>Start with the pingpair example. Follow the instructions in the comments of that sketch.</p>
+<h2><a class="anchor" id="hardware"></a>
+Where can I buy some hardware?</h2>
+<p>I've been using modules from mdfly.com.</p>
+<p>Mostly these units as the workhorse of the system:</p>
+<ul>
+<li>2.4Ghz Wireless nRF24L01 Transceiver Module $6.95 <a href="http://www.mdfly.com/index.php?main_page=product_info&cPath=8_52&products_id=82">http://www.mdfly.com/index.php?main_page=product_info&amp;cPath=8_52&amp;products_id=82</a></li>
 </ul>
-</div>
+<p>And then also experimenting with these for greater range</p>
+<ul>
+<li>nRF24L01 2.4GHz Transceiver Module w/ Power Amplifier $12.95 <a href="http://www.mdfly.com/index.php?main_page=product_info&cPath=8_52&products_id=394">http://www.mdfly.com/index.php?main_page=product_info&amp;cPath=8_52&amp;products_id=394</a> </li>
+<li>2.4GHz Transceiver Module w/ Power Amplifier $19.95 <a href="http://www.mdfly.com/index.php?main_page=product_info&cPath=8_52&products_id=583">http://www.mdfly.com/index.php?main_page=product_info&amp;cPath=8_52&amp;products_id=583</a></li>
+</ul>
+<p>However, I also noticed that iTeadStudio has nRF24L01+ units for $4!</p>
+<h2><a class="anchor" id="range"></a>
+What is the range of these units?</h2>
+<p>Here are some results from measurements I have taken. I recommend that everyone take their own measurements in their particular circumstances.</p>
+<ul>
+<li>non-plus unit, 2MBps (worst case), 41+ ft line of sight indoors, immediate dropoff with any deviation from LOS. (41 ft is as far as I can go in my house without turning a corner) </li>
+<li>Plus unit, 250kbps (best case), 46 ft around two corners indoors, 49 ft around one corner. More importantly, at 250k, packet loss is almost negligible through almost all of that range. </li>
+<li>Both units at 1MBps, plus unit gets about 10% range improvement over non-plus in almost all situations.</li>
+</ul>
+<h2><a class="anchor" id="tests"></a>
+Why are the examples in the 'tests' directory failing?</h2>
+<p>The sketches in the 'tests' directory are not for general use. Please use the examples in the 'examples' directory instead.</p>
+<p>The 'tests' directory is only for people making changes to the library to ensure that their changes do not break anything. </p>
+</div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
