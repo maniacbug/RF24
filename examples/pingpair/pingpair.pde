@@ -97,6 +97,8 @@ void setup(void)
   // improve reliability
   radio.setPayloadSize(8);
 
+  radio.setChannel(106);
+
   //
   // Open pipes to other nodes for communication
   //

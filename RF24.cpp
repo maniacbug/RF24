@@ -91,12 +91,12 @@ uint8_t RF24::write_register(uint8_t reg, uint8_t value)
 {
   uint8_t status;
 
-  IF_SERIAL_DEBUG(printf_P(PSTR("write_register(%02x,%02x)\n\r"),reg,value));
-
   csn(LOW);
   status = SPI.transfer( W_REGISTER | ( REGISTER_MASK & reg ) );
   SPI.transfer(value);
   csn(HIGH);
+ 
+  IF_SERIAL_DEBUG(printf_P(PSTR("write_register(%02x,%02x) now %02x\n\r"),reg,value,read_register(reg)));
 
   return status;
 }
@@ -417,6 +417,17 @@ void RF24::powerUp(void)
 
 /******************************************************************/
 
+struct test_data_t
+{
+  uint8_t direct_status;
+  uint8_t status;
+  uint8_t observe_tx;
+};
+static test_data_t test_data[100];
+static test_data_t* cur_test_data;
+static const int num_test_data = sizeof(test_data)/sizeof(test_data_t);
+static const test_data_t* end_test_data = test_data + num_test_data;
+
 bool RF24::write( const void* buf, uint8_t len )
 {
   bool result = false;
@@ -434,17 +445,50 @@ bool RF24::write( const void* buf, uint8_t len )
 
   // IN the end, the send should be blocking.  It comes back in 60ms worst case, or much faster
   // if I tighted up the retry logic.  (Default settings will be 1500us.
+
+  // Test code to verify whether the read_register logic below is correct.
+  // We will measure 3 things repeatedly:
+  // * observe_tx
+  // * return value of read_register call
+  // * direct read 'status'
+
+  // Reset test ptr
+  cur_test_data = test_data;
+
   // Monitor the send
   uint8_t observe_tx;
   uint8_t status;
+  uint8_t direct_status = 0; // testing only
   uint32_t sent_at = millis();
+  uint32_t now = millis();
   const uint32_t timeout = 500; //ms to wait for timeout
   do
   {
     status = read_register(OBSERVE_TX,&observe_tx,1);
     IF_SERIAL_DEBUG(Serial.print(observe_tx,HEX));
+
+    //direct_status = read_register(STATUS);
+
+    if ( cur_test_data <= end_test_data )
+    {
+      cur_test_data->direct_status = direct_status;
+      cur_test_data->status = status;
+      cur_test_data->observe_tx = observe_tx;
+      ++cur_test_data;
+    }
+    now = millis();
   }
-  while( ! ( status & ( _BV(TX_DS) | _BV(MAX_RT) ) ) && ( millis() - sent_at < timeout ) );
+  while( ! ( status & ( _BV(TX_DS) | _BV(MAX_RT) ) ) && ( now - sent_at < timeout ) );
+
+  // SPECIAL TEST CODE
+  printf_P(PSTR("\r\nFinal result: otx=%02x status=%02x direct=%02x #test_data=%i elapsed=%lu\r\n"),
+      observe_tx,
+      status,
+      direct_status,
+      cur_test_data - test_data,
+      now - sent_at
+    );
+
 
   // The part above is what you could recreate with your own interrupt handler,
   // and then call this when you got an interrupt
