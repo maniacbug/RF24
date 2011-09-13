@@ -30,9 +30,6 @@
 
 void RF24::csn(int mode)
 {
-  SPI.setBitOrder(MSBFIRST);
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setClockDivider(SPI_CLOCK_DIV2);
   digitalWrite(csn_pin,mode);
 }
 
@@ -45,11 +42,25 @@ void RF24::ce(int level)
 
 /****************************************************************************/
 
+void RF24::configSPIBus(void)
+{
+  // Minimum ideal SPI bus speed is 2x data rate
+  // If we assume 2Mbs data rate and 16Mhz clock, a
+  // divider of 4 is the minimum we want.
+  // CLK:BUS 8Mhz:2Mhz, 16Mhz:4Mhz, or 20Mhz:5Mhz
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setClockDivider(SPI_CLOCK_DIV4); 
+}
+
+/****************************************************************************/
+
 uint8_t RF24::read_register(uint8_t reg, uint8_t* buf, uint8_t len)
 {
   uint8_t status;
 
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( R_REGISTER | ( REGISTER_MASK & reg ) );
   while ( len-- )
     *buf++ = SPI.transfer(0xff);
@@ -64,6 +75,7 @@ uint8_t RF24::read_register(uint8_t reg, uint8_t* buf, uint8_t len)
 uint8_t RF24::read_register(uint8_t reg)
 {
   csn(LOW);
+  configSPIBus() ;
   SPI.transfer( R_REGISTER | ( REGISTER_MASK & reg ) );
   uint8_t result = SPI.transfer(0xff);
 
@@ -78,6 +90,7 @@ uint8_t RF24::write_register(uint8_t reg, const uint8_t* buf, uint8_t len)
   uint8_t status;
 
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( W_REGISTER | ( REGISTER_MASK & reg ) );
   while ( len-- )
     SPI.transfer(*buf++);
@@ -96,6 +109,7 @@ uint8_t RF24::write_register(uint8_t reg, uint8_t value)
   IF_SERIAL_DEBUG(printf_P(PSTR("write_register(%02x,%02x)\n\r"),reg,value));
 
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( W_REGISTER | ( REGISTER_MASK & reg ) );
   SPI.transfer(value);
   csn(HIGH);
@@ -117,6 +131,7 @@ uint8_t RF24::write_payload(const void* buf, uint8_t len)
   //printf("[Writing %u bytes %u blanks]",data_len,blank_len);
   
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( W_TX_PAYLOAD );
   while ( data_len-- )
     SPI.transfer(*current++);
@@ -140,6 +155,7 @@ uint8_t RF24::read_payload(void* buf, uint8_t len)
   //printf("[Reading %u bytes %u blanks]",data_len,blank_len);
   
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( R_RX_PAYLOAD );
   while ( data_len-- )
     *current++ = SPI.transfer(0xff);
@@ -157,7 +173,8 @@ uint8_t RF24::flush_rx(void)
   uint8_t status;
 
   csn(LOW);
-  status = SPI.transfer( FLUSH_RX );
+  configSPIBus() ;
+  status = SPI.transfer( FLUSH_RX );  
   csn(HIGH);
 
   return status;
@@ -170,7 +187,8 @@ uint8_t RF24::flush_tx(void)
   uint8_t status;
 
   csn(LOW);
-  status = SPI.transfer( FLUSH_TX );
+  configSPIBus() ;
+  status = SPI.transfer( FLUSH_TX );  
   csn(HIGH);
 
   return status;
@@ -183,6 +201,7 @@ uint8_t RF24::get_status(void)
   uint8_t status;
 
   csn(LOW);
+  configSPIBus() ;
   status = SPI.transfer( NOP );
   csn(HIGH);
 
@@ -299,10 +318,12 @@ void RF24::printDetails(void)
   const char * rf24_datarate_e_str[] = { "1MBPS", "2MBPS", "250KBPS" };
   const char * rf24_model_e_str[] = { "nRF24L01", "nRF24L01+" } ;
   const char * rf24_crclength_e_str[] = { "Disabled", "8 bits", "16 bits" } ;
+  const char * rf24_pa_dbm_e_str[] = { "PA_MIN", "PA_LOW", "LA_MED", "PA_HIGH"} ;
   
   printf_P(PSTR("Data Rate\t = %s\n\r"),rf24_datarate_e_str[getDataRate()]);
   printf_P(PSTR("Model\t\t = %s\n\r"),rf24_model_e_str[isPVariant()]);
   printf_P(PSTR("CRC Length\t = %s\n\r"),rf24_crclength_e_str[getCRCLength()]);
+  printf_P(PSTR("PA Power\t = %s\n\r"),rf24_pa_dbm_e_str[getPALevel()]);
 }
 
 /****************************************************************************/
@@ -314,17 +335,8 @@ void RF24::begin(void)
   pinMode(csn_pin,OUTPUT);
 
   // Initialize SPI bus
-  // Minimum ideal SPI bus speed is 2x data rate
-  // If we assume 2Mbs data rate and 16Mhz clock, a
-  // divider of 4 is the minimum we want.
-  // CLK:BUS 8Mhz:2Mhz, 16Mhz:4Mhz, or 20Mhz:5Mhz
-  // We'll use a divider of 2 which will work up to
-  // MCU speeds of 20Mhz.
-  // CLK:BUS 8Mhz:4Mhz, 16Mhz:8Mhz, or 20Mhz:10Mhz (max)
   SPI.begin();
-  SPI.setBitOrder(MSBFIRST);
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setClockDivider(SPI_CLOCK_DIV2);
+  configSPIBus() ;
 
   ce(LOW);
   csn(HIGH);
@@ -369,7 +381,9 @@ void RF24::begin(void)
   write_register(STATUS,_BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT) );
 
   // Set up default configuration.  Callers can always change it later.
-  setChannel(100);
+  // This channel should be universally safe and not bleed over into adjacent
+  // spectrum.
+  setChannel(76);
 
   // Flush buffers
   flush_rx();
@@ -417,7 +431,7 @@ void RF24::powerUp(void)
   write_register(CONFIG,read_register(CONFIG) | _BV(PWR_UP));
 }
 
-/******************************************************************/
+/****************************************************************************/
 
 bool RF24::write( const void* buf, uint8_t len )
 {
@@ -434,17 +448,22 @@ bool RF24::write( const void* buf, uint8_t len )
   // or MAX_RT (maximum retries, transmission failed).  Also, we'll timeout in case the radio
   // is flaky and we get neither.
 
-  // IN the end, the send should be blocking.  It comes back in 60ms worst case, or much faster
-  // if I tighted up the retry logic.  (Default settings will be 1500us.
+  // For the timeout to ever be triggered means we've hit a serious programming error and/or
+  // hardware failure. It should never happen. Regardless, we'll dynamically adapt with
+  // ARD/ARC programming changes. This computes actual hardware AA timeout + 1ms.
+  const uint8_t ardarc = read_register( SETUP_RETR ) ;
+  const uint32_t timeout = ((((((ardarc & 0xF0) >> ARD) + 1) * 250 ) * \
+			     ((ardarc & 0x0F) >> ARC)) / 1000) + 1 ;
+  IF_SERIAL_DEBUG(Serial.print("timeout"));
+  IF_SERIAL_DEBUG(Serial.print(timeout));
+
   // Monitor the send
-  uint8_t observe_tx;
   uint8_t status;
   uint32_t sent_at = millis();
-  const uint32_t timeout = 500; //ms to wait for timeout
   do
   {
-    status = read_register(OBSERVE_TX,&observe_tx,1);
-    IF_SERIAL_DEBUG(Serial.print(observe_tx,HEX));
+    read_register(STATUS, &status, 1 ) ;
+    IF_SERIAL_DEBUG(Serial.print(status,HEX));
   }
   while( ! ( status & ( _BV(TX_DS) | _BV(MAX_RT) ) ) && ( millis() - sent_at < timeout ) );
 
@@ -459,8 +478,8 @@ bool RF24::write( const void* buf, uint8_t len )
   // * There is an ack packet waiting (RX_DR)
   bool tx_ok, tx_fail;
   whatHappened(tx_ok,tx_fail,ack_payload_available);
-  
-  //printf("%u%u%u\n\r",tx_ok,tx_fail,ack_payload_available);
+  // printf( "ok: %d, fail: %d, ack: %d\n\r", tx_ok, tx_fail, ack_payload_available ) ;
+  // printf("%u%u%u\n\r",tx_ok,tx_fail,ack_payload_available);
 
   result = tx_ok;
   IF_SERIAL_DEBUG(Serial.print(result?"...OK.":"...Failed"));
@@ -483,6 +502,8 @@ bool RF24::write( const void* buf, uint8_t len )
 
   return result;
 }
+
+
 /****************************************************************************/
 
 void RF24::startWrite( const void* buf, uint8_t len )
@@ -508,6 +529,7 @@ uint8_t RF24::getDynamicPayloadSize(void)
   uint8_t result = 0;
 
   csn(LOW);
+  configSPIBus() ;
   SPI.transfer( R_RX_PL_WID );
   result = SPI.transfer(0xff);
   csn(HIGH);
@@ -638,6 +660,7 @@ void RF24::openReadingPipe(uint8_t child, uint64_t address)
 void RF24::toggle_features(void)
 {
   csn(LOW);
+  configSPIBus() ;
   SPI.transfer( ACTIVATE );
   SPI.transfer( 0x73 );
   csn(HIGH);
@@ -687,7 +710,7 @@ void RF24::enableAckPayload(void)
     write_register(FEATURE,read_register(FEATURE) | _BV(EN_ACK_PAY) | _BV(EN_DPL) );
   }
 
-  IF_SERIAL_DEBUG(printf("FEATURE=%i\n\r",read_register(FEATURE)));
+  IF_SERIAL_DEBUG(printf_P(PSTR(("FEATURE=%i\n\r"),read_register(FEATURE))));
 
   //
   // Enable dynamic payload on pipes 0 & 1
@@ -703,6 +726,7 @@ void RF24::writeAckPayload(uint8_t pipe, const void* buf, uint8_t len)
   const uint8_t* current = reinterpret_cast<const uint8_t*>(buf);
 
   csn(LOW);
+  configSPIBus() ;
   SPI.transfer( W_ACK_PAYLOAD | ( pipe & B111 ) );
   uint8_t data_len = min(len,32);
   while ( data_len-- )
