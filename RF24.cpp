@@ -6,7 +6,7 @@
  version 2 as published by the Free Software Foundation.
  */
 
-#include <WProgram.h>
+#include <Arduino.h>
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"

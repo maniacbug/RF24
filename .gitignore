@@ -5,7 +5,10 @@
 .swp
 docs/
 output/
+out/
 ojam/
 out_native/
+16000000/
+8000000/
 version.h
 Session.vim
