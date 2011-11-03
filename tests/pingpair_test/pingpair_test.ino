@@ -85,7 +85,7 @@ bool notified; //*< Have we notified the user we're done? */
 const int num_needed = 10; //*< How many success/failures until we're done? */
 int receives_remaining = num_needed; //*< How many ack packets until we declare victory? */
 int failures_remaining = num_needed; //*< How many more failed sends until we declare failure? */
-const int interval = 100; //*< ms to wait between sends */
+const int interval = 1000; //*< ms to wait between sends */
 
 char configuration = '1'; //*< Configuration key, one char sent in by the test framework to tell us how to configure, this is the default */
 
@@ -230,7 +230,7 @@ void setup(void)
   // Dump the configuration of the rf unit for debugging
   //
 
-  radio.printDetails();
+  //radio.printDetails();
 
   //
   // Attach interrupt handler to interrupt #0 (using pin 2)

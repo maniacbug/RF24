@@ -1,6 +1,6 @@
 PROJECT_NAME 	= $(PWD:B) ;
 PROJECT_DIR 	= . ;
-PROJECT_LIBS 	= SPI RF24 ; 
+PROJECT_LIBS 	= SPI RF24 MemoryFree ; 
 
 F_CPU 		= 16000000 ;
 OUT_DIR		= $(F_CPU) ;
@@ -14,9 +14,11 @@ COM 		= 33 ;
 if $(OS) = MACOSX 
 {
 ARDUINO_VERSION	= 100 ;
-OLD_DIR 	= /opt/arduino-0021 ;
-AVR_TOOLS_PATH 	= $(OLD_DIR)/hardware/tools/avr/bin ;
-AVRDUDECONFIG_PATH = $(OLD_DIR)/hardware/tools/avr/etc ;
+#OLD_DIR 	= /opt/arduino-0021 ;
+#AVR_TOOLS_PATH 	= $(OLD_DIR)/hardware/tools/avr/bin ;
+#AVRDUDECONFIG_PATH = $(OLD_DIR)/hardware/tools/avr/etc ;
+AVR_TOOLS_PATH	= /usr/local/avrtools/bin ;
+AVRDUDECONFIG_PATH = /usr/local/avrtools/etc ;
 ARDUINO_DIR 	= /opt/Arduino ;
 ARDUINO_AVR 	= /usr/lib/avr/include ;
 }
@@ -28,7 +30,7 @@ ARDUINO_DIR 	?= /opt/arduino-1.0-beta1 ;
 ARDUINO_AVR 	?= $(ARDUINO_DIR)/hardware/tools/avr/avr/include/avr ;
 AVRDUDECONFIG_PATH ?= $(ARDUINO_DIR)/hardware/tools ;
 ARDUINO_CORE 	= $(ARDUINO_DIR)/hardware/arduino/cores/arduino ;
-ARDUINO_PINS	= $(ARDUINO_DIR)/hardware/arduino/variants/standard ;
+ARDUINO_PINS	= $(ARDUINO_DIR)/hardware/arduino/variants/standard $(ARDUINO_DIR)/hardware/arduino/pins/standard ;
 ARDUINO_LIB 	= $(ARDUINO_DIR)/libraries ;
 SKETCH_LIB      = $(HOME)/Source/Arduino/libraries ;
 AVR_CC  	= $(AVR_TOOLS_PATH)/avr-gcc ;
