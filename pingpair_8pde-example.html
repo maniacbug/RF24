@@ -194,7 +194,12 @@ role_e role;
     <span class="comment">// Take the time, and send it.  This will block until complete</span>
     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> time = millis();
     printf(<span class="stringliteral">&quot;Now sending %lu...&quot;</span>,time);
-    radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
+    <span class="keywordtype">bool</span> ok = radio.write( &amp;time, <span class="keyword">sizeof</span>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>) );
+    
+    <span class="keywordflow">if</span> (ok)
+      printf(<span class="stringliteral">&quot;ok...&quot;</span>);
+    <span class="keywordflow">else</span>
+      printf(<span class="stringliteral">&quot;failed.\n\r&quot;</span>);
 
     <span class="comment">// Now, continue listening</span>
     radio.startListening();
@@ -279,7 +284,7 @@ role_e role;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 4 2011 20:47:10 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Nov 2 2011 21:54:34 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
