@@ -59,7 +59,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>This sketch is a more complex example of using the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> library for Arduino. Deploy this on up to six nodes. Set one as the 'pong receiver' by tying the role_pin low, and the others will be 'ping transmit' units. The ping units unit will send out the value of millis() once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took.</p>
 <p>This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role_pin tied to ground. The ping senders are further differentiated by a byte in eeprom.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
-<span class="comment"> Copyright (C) 2011 James Coliz, Jr. &lt;maniacbug@ymail.com&gt;</span>
+<span class="comment"> Copyright (C) 2011 J. Coliz &lt;maniacbug@ymail.com&gt;</span>
 <span class="comment"></span>
 <span class="comment"> This program is free software; you can redistribute it and/or</span>
 <span class="comment"> modify it under the terms of the GNU General Public License</span>
@@ -352,7 +352,7 @@ uint8_t node_address;
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed Dec 21 2011 10:15:49 for RF24 by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sat Dec 24 2011 10:10:04 for RF24 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
