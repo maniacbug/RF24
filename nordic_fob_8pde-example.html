@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RF24: scanner.pde</title>
+<title>RF24: nordic_fob.pde</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -53,13 +53,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">scanner.pde</div>  </div>
+<div class="title">nordic_fob.pde</div>  </div>
 </div>
 <div class="contents">
-<p>Example to detect interference on the various channels available. This is a good diagnostic tool to check whether you're picking a good channel for your application.</p>
-<p>Inspired by cpixip. See <a href="http://arduino.cc/forum/index.php/topic,54795.0.html">http://arduino.cc/forum/index.php/topic,54795.0.html</a></p>
+<p>This is an example of how to use the <a class="el" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> class to receive signals from the Sparkfun Nordic FOB. See <a href="http://www.sparkfun.com/products/8602">http://www.sparkfun.com/products/8602</a> . Thanks to Kirk Mower for providing test hardware.</p>
 <div class="fragment"><pre class="fragment"><span class="comment">/*</span>
-<span class="comment"> Copyright (C) 2011 J. Coliz &lt;maniacbug@ymail.com&gt;</span>
+<span class="comment"> Copyright (C) 2012 J. Coliz &lt;maniacbug@ymail.com&gt;</span>
 <span class="comment"></span>
 <span class="comment"> This program is free software; you can redistribute it and/or</span>
 <span class="comment"> modify it under the terms of the GNU General Public License</span>
@@ -67,8 +66,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <span class="comment"> */</span>
 
 <span class="preprocessor">#include &lt;SPI.h&gt;</span>
+<span class="preprocessor">#include &lt;<a class="code" href="RF24_8h.html" title="Class declaration for RF24 and helper enums.">RF24.h</a>&gt;</span>
 <span class="preprocessor">#include &quot;nRF24L01.h&quot;</span>
-<span class="preprocessor">#include &quot;<a class="code" href="RF24_8h.html" title="Class declaration for RF24 and helper enums.">RF24.h</a>&quot;</span>
 <span class="preprocessor">#include &quot;printf.h&quot;</span>
 
 <span class="comment">//</span>
@@ -77,14 +76,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <span class="comment">// Set up nRF24L01 radio on SPI bus plus pins 9 &amp; 10</span>
 
-<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> radio(9,10);
+<a name="_a0"></a><a class="code" href="classRF24.html" title="Driver for nRF24L01(+) 2.4GHz Wireless Transceiver.">RF24</a> radio(8,9);
 
 <span class="comment">//</span>
-<span class="comment">// Channel info</span>
+<span class="comment">// Payload</span>
 <span class="comment">//</span>
 
-<span class="keyword">const</span> uint8_t num_channels = 128;
-uint8_t values[num_channels];
+<span class="keyword">struct </span>payload_t
+{
+  uint8_t buttons;
+  uint16_t id;
+  uint8_t empty;
+};
+
+<span class="keyword">const</span> <span class="keywordtype">char</span>* button_names[] = { <span class="stringliteral">&quot;Up&quot;</span>, <span class="stringliteral">&quot;Down&quot;</span>, <span class="stringliteral">&quot;Left&quot;</span>, <span class="stringliteral">&quot;Right&quot;</span>, <span class="stringliteral">&quot;Center&quot;</span> }; 
+<span class="keyword">const</span> <span class="keywordtype">int</span> num_buttons = 5;
+
+<span class="comment">//</span>
+<span class="comment">// Forward declarations</span>
+<span class="comment">//</span>
+
+uint16_t flip_endian(uint16_t in);
 
 <span class="comment">//</span>
 <span class="comment">// Setup</span>
@@ -98,79 +110,86 @@ uint8_t values[num_channels];
 
   Serial.begin(57600);
   printf_begin();
-  printf(<span class="stringliteral">&quot;\n\rRF24/examples/scanner/\n\r&quot;</span>);
+  printf(<span class="stringliteral">&quot;\r\nRF24/examples/nordic_fob/\r\n&quot;</span>);
 
   <span class="comment">//</span>
-  <span class="comment">// Setup and configure rf radio</span>
+  <span class="comment">// Setup and configure rf radio according to the built-in parameters</span>
+  <span class="comment">// of the FOB.</span>
   <span class="comment">//</span>
 
   radio.begin();
+  radio.setChannel(2);
+  radio.setPayloadSize(4);
   radio.setAutoAck(<span class="keyword">false</span>);
+  radio.setCRCLength(RF24_CRC_8);
+  radio.openReadingPipe(1,0xE7E7E7E7E7LL);
 
-  <span class="comment">// Get into standby mode</span>
+  <span class="comment">//</span>
+  <span class="comment">// Start listening</span>
+  <span class="comment">//</span>
+
   radio.startListening();
-  radio.stopListening();
 
-  <span class="comment">// Print out header, high then low digit</span>
-  <span class="keywordtype">int</span> i = 0;
-  <span class="keywordflow">while</span> ( i &lt; num_channels )
-  {
-    printf(<span class="stringliteral">&quot;%x&quot;</span>,i&gt;&gt;4);
-    ++i;
-  }
-  printf(<span class="stringliteral">&quot;\n\r&quot;</span>);
-  i = 0;
-  <span class="keywordflow">while</span> ( i &lt; num_channels )
-  {
-    printf(<span class="stringliteral">&quot;%x&quot;</span>,i&amp;0xf);
-    ++i;
-  }
-  printf(<span class="stringliteral">&quot;\n\r&quot;</span>);
+  <span class="comment">//</span>
+  <span class="comment">// Dump the configuration of the rf unit for debugging</span>
+  <span class="comment">//</span>
+
+  radio.printDetails();
 }
 
 <span class="comment">//</span>
 <span class="comment">// Loop</span>
 <span class="comment">//</span>
 
-<span class="keyword">const</span> <span class="keywordtype">int</span> num_reps = 100;
-
 <span class="keywordtype">void</span> loop(<span class="keywordtype">void</span>)
 {
-  <span class="comment">// Clear measurement values</span>
-  memset(values,0,<span class="keyword">sizeof</span>(values));
+  <span class="comment">//</span>
+  <span class="comment">// Receive each packet, dump it out</span>
+  <span class="comment">//</span>
 
-  <span class="comment">// Scan all channels num_reps times</span>
-  <span class="keywordtype">int</span> rep_counter = num_reps;
-  <span class="keywordflow">while</span> (rep_counter--)
-  {
-    <span class="keywordtype">int</span> i = num_channels;
-    <span class="keywordflow">while</span> (i--)
+    <span class="comment">// if there is data ready</span>
+    <span class="keywordflow">if</span> ( radio.available() )
     {
-      <span class="comment">// Select this channel</span>
-      radio.setChannel(i);
+      <span class="comment">// Get the packet from the radio</span>
+      payload_t payload;
+      radio.read( &amp;payload, <span class="keyword">sizeof</span>(payload) );
 
-      <span class="comment">// Listen for a little</span>
-      radio.startListening();
-      delayMicroseconds(128);
-      radio.stopListening();
+      <span class="comment">// Print the ID of this message.  Note that the message</span>
+      <span class="comment">// is sent &#39;big-endian&#39;, so we have to flip it.</span>
+      printf(<span class="stringliteral">&quot;#%05u Buttons &quot;</span>,flip_endian(payload.id));
 
-      <span class="comment">// Did we get a carrier?</span>
-      <span class="keywordflow">if</span> ( radio.testCarrier() )
-        ++values[i];
+      <span class="comment">// Print the name of each button </span>
+      <span class="keywordtype">int</span> i = num_buttons;
+      <span class="keywordflow">while</span> (i--)
+      {
+        <span class="keywordflow">if</span> ( ! ( payload.buttons &amp; _BV(i) ) )
+        {
+          printf(<span class="stringliteral">&quot;%s &quot;</span>,button_names[i]);
+        }
+      }
+
+      <span class="comment">// If no buttons, print None</span>
+      <span class="keywordflow">if</span> ( payload.buttons == _BV(num_buttons) - 1 )
+        printf(<span class="stringliteral">&quot;None&quot;</span>);
+
+      printf(<span class="stringliteral">&quot;\r\n&quot;</span>);
     }
-  }
-
-  <span class="comment">// Print out channel measurements, clamped to a single hex digit</span>
-  <span class="keywordtype">int</span> i = 0;
-  <span class="keywordflow">while</span> ( i &lt; num_channels )
-  {
-    printf(<span class="stringliteral">&quot;%x&quot;</span>,min(0xf,values[i]&amp;0xf));
-    ++i;
-  }
-  printf(<span class="stringliteral">&quot;\n\r&quot;</span>);
 }
 
-<span class="comment">// vim:ai:cin:sts=2 sw=2 ft=cpp</span>
+<span class="comment">//</span>
+<span class="comment">// Helper functions</span>
+<span class="comment">//</span>
+
+<span class="comment">// Change a big-endian word into a little-endian</span>
+uint16_t flip_endian(uint16_t in)
+{
+  uint16_t low = in &gt;&gt; 8;
+  uint16_t high = in &lt;&lt; 8;
+
+  <span class="keywordflow">return</span> high | low;
+}
+
+<span class="comment">// vim:cin:ai:sts=2 sw=2 ft=cpp</span>
 </pre></div> </div>
 </div>
 <!-- window showing the filter options -->
