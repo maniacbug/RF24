@@ -612,8 +612,10 @@ public:
    * @param[out] tx_ok The send was successful (TX_DS)
    * @param[out] tx_fail The send failed, too many retries (MAX_RT)
    * @param[out] rx_ready There is a message waiting to be read (RX_DS)
+   *
+   * @return Pipe number for which data is ready. Only valid if rx_ready == true
    */
-  void whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready);
+  uint8_t whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready);
 
   /**
    * Test whether there was a carrier on the line for the
