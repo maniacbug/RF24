@@ -1,6 +1,7 @@
 
 /*
  Copyright (C) 2011 James Coliz, Jr. <maniacbug@ymail.com>
+ Copyright (c) 2012 Greg Copeland
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,9 +20,11 @@
  */
 
 #include <SPI.h>
-#include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
+
+// Only display active frequencies
+static const bool activeOnly = true ;
 
 //
 // Hardware configuration
@@ -37,6 +40,7 @@ RF24 radio(8,9);
 
 const short num_channels = 128;
 short values[num_channels];
+uint8_t signalMeter[55] ;
 
 //
 // Setup
@@ -48,7 +52,7 @@ void setup(void)
   // Print preamble
   //
 
-  Serial.begin(57600);
+  Serial.begin(115200);
   printf_begin();
   printf("\n\rRF24/examples/scanner/\n\r");
 
@@ -57,69 +61,72 @@ void setup(void)
   //
 
   radio.begin();
+  radio.powerUp() ;
   radio.setAutoAck(false);
 
   // Get into standby mode
-  radio.startListening();
-  radio.stopListening();
-
-  // Print out header, high then low digit
-  int i = 0;
-  while ( i < num_channels )
-  {
-    printf("%x",i>>4);
-    ++i;
-  }
-  printf("\n\r");
-  i = 0;
-  while ( i < num_channels )
-  {
-    printf("%x",i&0xf);
-    ++i;
-  }
-  printf("\n\r");
+  radio.openReadingPipe( 0, 0xFFFFFFFFFFULL ) ;
+  //  radio.setDataRate( RF24_250KBPS ) ; // may fallback to 1Mbps
+  radio.setDataRate( RF24_1MBPS ) ; // may fallback to 1Mbps
+  radio.startListening() ;
+  radio.stopListening() ;
 }
 
 //
 // Loop
 //
-
-const short num_reps = 100;
-
 void loop(void)
 {
   // Clear measurement values
-  memset(values,0,num_channels);
+  memset( values, 0x00, num_channels ) ;
+  memset( signalMeter, 0x00, 55 ) ;
+  printf( "Scanning all available frequencies..." ) ;
 
-  // Scan all channels num_reps times
-  int rep_counter = num_reps;
-  while (rep_counter--)
-  {
-    int i = num_channels;
-    while (i--)
-    {
-      // Select this channel
-      radio.setChannel(i);
+  // Repeatedly scan multiple channels
+  for( int channel=0 ; channel < num_channels; channel++ ) {
+    radio.setChannel( channel ) ;
 
-      // Listen for a little
-      radio.startListening();
-      delayMicroseconds(128);
-      radio.stopListening();
+    // Amplify the signal based on carrier bandwidth
+    int ampFactor ;
+    for( int amp=0; amp < 201; amp++ ) {
+      // Alternate data rates
+      ampFactor = amp%2 ;
+      switch( ampFactor ) {
+      case 0:
+	radio.setDataRate( RF24_250KBPS ) ;
+	break ;
 
-      // Did we get a carrier?
-      if ( radio.testCarrier() )
-        ++values[i];
+      default:
+	radio.setDataRate( RF24_2MBPS ) ;
+	break ;
+      }
+
+      // Listen for carrier
+      ampFactor++ ;
+      radio.startListening() ;
+      delayMicroseconds( 6 - ampFactor ) ;
+      radio.stopListening() ;
+
+      // Was carrier detected? If so, signal level based on bandwidth
+      if( radio.testRPD() ) {
+	values[channel] += ampFactor ;
+      }
     }
   }
 
-  // Print out channel measurements, clamped to a single hex digit
-  int i = 0;
-  while ( i < num_channels )
-  {
-    printf("%x",min(0xf,values[i]&0xf));
-    ++i;
+  // Now display our results
+  printf( "Scan completed.\r\n" ) ;
+  for( int channel=0 ; channel < num_channels; channel++ ) {
+    if( !activeOnly || (activeOnly && values[channel] > 0) ) {
+      memset( signalMeter, '*', min( values[channel], 54 ) ) ;
+      signalMeter[min(values[channel], 54)] = 0x00 ;
+      printf( "%03d (%4dMhz): %02d - %s\r\n",
+	      channel,
+	      2400+channel,
+	      values[channel],
+	      signalMeter ) ;
+    }
   }
-  printf("\n\r");
 }
 
 // vim:ai:cin:sts=2 sw=2 ft=cpp
