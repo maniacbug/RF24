@@ -79,7 +79,6 @@ void loop(void)
 {
   // Clear measurement values
   memset( values, 0x00, num_channels ) ;
-  memset( signalMeter, 0x00, 55 ) ;
   printf( "Scanning all available frequencies..." ) ;
 
   // Repeatedly scan multiple channels
@@ -88,12 +87,16 @@ void loop(void)
 
     // Amplify the signal based on carrier bandwidth
     int ampFactor ;
-    for( int amp=0; amp < 201; amp++ ) {
+    for( int amp=0; amp <= 300; amp++ ) {
       // Alternate data rates
-      ampFactor = amp%2 ;
+      ampFactor = amp%3 ;
       switch( ampFactor ) {
       case 0:
 	radio.setDataRate( RF24_250KBPS ) ;
+	break ;
+
+      case 1:
+	radio.setDataRate( RF24_1MBPS ) ;
 	break ;
 
       default:
@@ -125,6 +128,9 @@ void loop(void)
 	      2400+channel,
 	      values[channel],
 	      signalMeter ) ;
+
+      // Reset the scanned value since its already beend displayed
+      values[channel] = 0 ;
     }
   }
 }
