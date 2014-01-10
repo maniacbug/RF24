@@ -8,6 +8,11 @@
 
 #include "nRF24L01.h"
 #include "RF24_config.h"
+#ifdef SOFTSPI
+#include "DigitalIO.h"
+#else
+#include <SPI.h>
+#endif
 #include "RF24.h"
 
 /****************************************************************************/
@@ -19,9 +24,15 @@ void RF24::csn(int mode)
   // divider of 4 is the minimum we want.
   // CLK:BUS 8Mhz:2Mhz, 16Mhz:4Mhz, or 20Mhz:5Mhz
 #ifdef ARDUINO
+  //
+  //  we do not use these with SoftSPI
+  //
+#ifndef SOFTSPI
   SPI.setBitOrder(MSBFIRST);
   SPI.setDataMode(SPI_MODE0);
   SPI.setClockDivider(SPI_CLOCK_DIV4);
+#endif
+
 #endif
   digitalWrite(csn_pin,mode);
 }
