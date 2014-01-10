@@ -12,10 +12,15 @@
  * Class declaration for RF24 and helper enums
  */
 
+
 #ifndef __RF24_H__
 #define __RF24_H__
 
 #include <RF24_config.h>
+
+#ifdef SOFTSPI
+#include <DigitalIO.h>
+#endif
 
 /**
  * Power Amplifier level.
@@ -45,15 +50,18 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
 class RF24
 {
 private:
-  uint8_t ce_pin; /**< "Chip Enable" pin, activates the RX or TX role */
-  uint8_t csn_pin; /**< SPI Chip select */
-  bool wide_band; /* 2Mbs data rate in use? */
-  bool p_variant; /* False for RF24L01 and true for RF24L01P */
-  uint8_t payload_size; /**< Fixed size of payloads */
-  bool ack_payload_available; /**< Whether there is an ack payload waiting */
-  bool dynamic_payloads_enabled; /**< Whether dynamic payloads are enabled. */ 
-  uint8_t ack_payload_length; /**< Dynamic size of pending ack payload. */
-  uint64_t pipe0_reading_address; /**< Last address set on pipe 0 for reading. */
+#ifdef SOFTSPI
+	SoftSPI<SOFT_SPI_MISO_PIN, SOFT_SPI_MOSI_PIN, SOFT_SPI_SCK_PIN, SPI_MODE> spi;
+#endif
+	uint8_t ce_pin; /**< "Chip Enable" pin, activates the RX or TX role */
+	uint8_t csn_pin; /**< SPI Chip select */
+	bool wide_band; /* 2Mbs data rate in use? */
+	bool p_variant; /* False for RF24L01 and true for RF24L01P */
+	uint8_t payload_size; /**< Fixed size of payloads */
+	bool ack_payload_available; /**< Whether there is an ack payload waiting */
+	bool dynamic_payloads_enabled; /**< Whether dynamic payloads are enabled. */
+	uint8_t ack_payload_length; /**< Dynamic size of pending ack payload. */
+	uint64_t pipe0_reading_address; /**< Last address set on pipe 0 for reading. */
 
 protected:
   /**

@@ -35,6 +35,22 @@ extern HardwareSPI SPI;
 #else
 #define IF_SERIAL_DEBUG(x)
 #endif
+//
+// if we are using Soft SPI
+//
+#ifdef ARDUINO
+#define SOFTSPI				// comment out this line to use hardwarer SPI
+#ifdef SOFTSPI
+//
+// change these pins to your liking
+//
+const uint8_t SOFT_SPI_MISO_PIN = 16;
+const uint8_t SOFT_SPI_MOSI_PIN = 15;
+const uint8_t SOFT_SPI_SCK_PIN  = 14;
+const uint8_t SPI_MODE 			= 0;
+#define SPI spi
+#endif
+#endif
 
 // Avoid spurious warnings
 #if 1
