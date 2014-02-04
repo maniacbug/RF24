@@ -587,7 +587,7 @@ bool RF24::read( void* buf, uint8_t len )
 
 /****************************************************************************/
 
-void RF24::whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready)
+uint8_t RF24::whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready)
 {
   // Read the status & reset the status in one easy call
   // Or is that such a good idea?
@@ -597,6 +597,10 @@ void RF24::whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready)
   tx_ok = status & _BV(TX_DS);
   tx_fail = status & _BV(MAX_RT);
   rx_ready = status & _BV(RX_DR);
+    
+  // Return pipe number. However, it is only useful and valid when 
+  // something is received (rx_ready == true)
+  return ( status >> RX_P_NO ) & B111;
 }
 
 /****************************************************************************/
