@@ -461,7 +461,7 @@ public:
    * Relative mnemonics have been used to allow for future PA level
    * changes. According to 6.5 of the nRF24L01+ specification sheet,
    * they translate to: RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm,
-   * RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
+   * RF24_PA_HIGH=-6dBM, and RF24_PA_MAX=0dBm.
    *
    * @param level Desired PA level.
    */
