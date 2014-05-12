@@ -1,3 +1,14 @@
+MSP-RF24
+===============
+
+Source code for a remote controller using a msp430g2553 and a nrf24l01 from nordic,
+
+* [Original Repo.](http://maniacbug.github.com/RF24)
+* [LIBEMB Repo.](https://github.com/wendlers/libemb/tree/msp430-port)
+This library was precompiled and is included in this project just for the serial communication task.
+Some changes were done in order to allow serial compatibilty for every msp430 clock freqencies. (Most recent commit already has this change).
+
+
 # Arduino driver for nRF24L01 2.4GHz Wireless Transceiver
 
 Design Goals: This library is designed to be...
