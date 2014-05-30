@@ -1,4 +1,8 @@
-#include <WProgram.h>
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 #line 1 "scanner.pde"
 
 /*
@@ -20,7 +24,7 @@
  * See http://arduino.cc/forum/index.php/topic,54795.0.html
  */
 
-#include <SPI.h>
+#include "SPI.h"
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
