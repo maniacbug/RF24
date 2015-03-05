@@ -1,3 +1,7 @@
+## This library is defunct. Please support the most active fork now, here: https://github.com/TMRh20/RF24  
+
+---
+
 # Arduino driver for nRF24L01 2.4GHz Wireless Transceiver
 
 Design Goals: This library is designed to be...
