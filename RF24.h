@@ -568,7 +568,6 @@ public:
    *
    * @param buf Pointer to the data to be sent
    * @param len Number of bytes to be sent
-   * @return True if the payload was delivered successfully false if not
    */
   void startWrite( const void* buf, uint8_t len );
 
