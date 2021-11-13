@@ -216,7 +216,7 @@ void setup(void)
   }
   else if ( role == role_sender )
   {
-    radio.openReadingPipe(5,0);
+    radio.openReadingPipe((uint8_t)5,(uint64_t)0);
   }
 
   //
